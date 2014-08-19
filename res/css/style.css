@@ -1,0 +1,7 @@
+/*
+	Document : CSS ;
+	Author : Carlos Henry;
+	Date : 16/08/2014 - 10:34:19 AM;
+	Title : Expotec;
+*/
+*{margin:0;padding: 0;}body{padding-top: 50px; }.title {margin: 30px 0;}a,a:link , a:visited{color: #5CB85C;} hr{ border-top: 1px solid #CFCFCF; } .news{color: #E95350; } .alert {border-top: 3px solid #E99390;  background-color: #FAFAFA; box-shadow: 0 1px 1px #CCC; border-radius: 1px;} footer .content{height: 127px;background-color: #FAFAFA;margin-bottom: 0; padding: 2% 0 0 0; border-top: 1px solid #EEE;} img.slide-image {width: 100%;}.table tr{background-color: #FFF;box-shadow: none;}
