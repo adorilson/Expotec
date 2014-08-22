@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8">
+       	<link rel="shortcut icon" type="image/x-icon" href="http://portal.ifrn.edu.br/favicon.ico" />
+        <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<title> Mini Cursos </title>
@@ -26,7 +27,7 @@
 			      <ul class="nav navbar-nav">
 			        <li><a href="../palestras/"> Palestras</a></li>
 			       	<li class="active"><a href="">Mini Cursos</a></li>
-			       	<li ><a href=""> Portal IFRN </a></li>
+			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 			      </div><!-- /.navbar-collapse -->
 			  </div><!-- /.container-fluid -->
