@@ -1,3 +1,5 @@
+
+<?php include_once '../../php/connection.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -5,7 +7,7 @@
         <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title> Mini Cursos </title>
+		<title> Minicursos </title>
 		<link rel="stylesheet" href="../../res/lib/css/bootstrap.min.css">
 		<link rel="stylesheet" href="../../res/css/style.css">
 	</head>
@@ -25,19 +27,55 @@
 			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
-			        <li><a href="../palestras/"> Palestras</a></li>
-			       	<li class="active"><a href="">Mini Cursos</a></li>
+			        <li class="dropdown">
+			       	 	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Atividades<span class="caret"></span></a>
+			       	 	<ul class="dropdown-menu" role="menu">
+                        	<li><a href="../palestras/"> Palestras</a></li>
+                        	<li class="divider"></li>
+                        	<li><a href="">Mini Cursos</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="">Sobre</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 			      </div><!-- /.navbar-collapse -->
 			  </div><!-- /.container-fluid -->
 			</nav>
-			<h1 class=" title visible-md visible-lg "> Inscreva-se em Mini Cursos </h1>
-			<h2 class=" title visible-sm visible-xs"> Inscreva-se em Mini Cursos </h2> 
-		</header>
+			
+			<h1 class=" title visible-md visible-lg "> Inscreva-se em minicursos </h1>
+			<h2 class=" title visible-sm visible-xs"> Inscreva-se em minicursos </h2> 
 		
-		<div class="container main-content">	
-			<div class="alert col-md-12" >  
+		</header>
+
+		<div class="container main-header ">
+			<div class="row" >
+				<div class="container">
+					
+				<!-- Filtros dos sonhos -->	
+				<form class="form-inline pull-right" method="POST" action="#" role="form">
+				  <span id="search_title"> Agilize sua busca:</span>
+				  <div class="form-group">
+				 	<div class="input-group">
+				      <input class="form-control"  name="title_post" type="text" placeholder="Titulo...">
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <div class="input-group">
+				      <input class="form-control" name="categoria_post"  type="text" placeholder="Categorias...">
+				    </div>
+				  </div>
+				  <button type="submit"  class="btn btn-success">Pesquisar</button>
+				</form>
+				</div>
+			</div>
+		</div> 
+		<div class="container main-content ">
+			
+			<br>
+		
+
+			<div class="alert col-md-12" >
+				<div class="row">
 				<br><br>
 				<!-- Table -->
 				<table class="table table-striped">
@@ -45,6 +83,7 @@
 			          <tr>
 			            <th>Título</th>
 			            <th>Professor</th>
+						<th>Categoria</th>
 			            <th>Local</th>
 			            <th>Data</th>
 			            <th>Horário</th>
@@ -53,67 +92,59 @@
 			          </tr>
 			        </thead>
 			        <tbody>
-			          <tr>
-			            <td> Git </td>
-			          	<td> Ricardo  </td>
-			            <td> Auditório </td>
-			            <td> 28/09/2014 </td>
-						<td> 14:30PM </td>
-						<td> 60 </td>
-						<td><a href="inscricao/"> Inscrever-se </a></td>
-			          </tr>
+			        	
+					<?php 
 
-			          <tr>
-			           	<td> Bootstrap </td>
-			            <td> Jacob </td>
-			            <td> Auditório </td>
-			            <td> 27/09/2014 </td>
-			            <td> 14:30PM </td>
-						<td> 50 </td>
-			            <td><a href="inscricao/"> Inscrever-se </a></td>
-			          </tr>
-			          <tr>
-			            <td> HTML5/CSS3 </td>
-			            <td> Bianca </td>
-			            <td> Auditório </td>
-			            <td> 26/09/2014 </td>
-			            <td> 14:30PM </td>
-			            <td> 70 </td>
-			            <td><a href="inscricao/"> Inscrever-se </a></td>
-			          </tr>
-			          <tr>
-			          	<td> Jquery </td>
-			          	<td> Henry </td>
-			          	<td> Auditório </td>
-			          	<td> 26/09/2014 </td>
-			          	<td> 10:30AM </td>
-			          	<td> 70 </td>
-			          	<td><a href="inscricao/"> Inscrever-se </a></td>
-			          </tr>
-			          <tr>
-			          	<td> PHP PDO </td>
-			          	<td> Henry </td>
-			          	<td> Auditório </td>
-			          	<td> 25/09/2014 </td>
-			          	<td> 14:30PM </td>
-			          	<td> 70 </td>
-			          	<td><a href="inscricao/"> Inscrever-se </a></td>
-			          </tr>
-			          <tr>
-			          	<td> Android </td>
-			          	<td> Henry </td>
-			          	<td> Auditório </td>
-			          	<td> 25/09/2014 </td>
-			          	<td> 14:30PM </td>
-			          	<td> 100 </td>
-			          	<td><a href="inscricao/"> Inscrever-se </a></td>
-			          </tr>
+						if($_POST){
+							$title = $_POST['title_post'];
+				        	$categoria = $_POST['categoria_post'];
+				        	$command = "SELECT * FROM atividade WHERE nome = 'Minicurso' AND titulo LIKE '%$title%' AND categoria LIKE '%$categoria%'";
+						  
+						}else{
+							$command = "SELECT * FROM atividade WHERE nome = 'Minicurso'";	
+						}
+			        							  
+						    try {
+						    	$query = $pdo->prepare($command);
+						    	$query->execute();
+
+
+						    } catch (PDOException $e) {
+						      	echo $e->getMessage();
+						    }
+						    while ($result = $query->fetch(PDO::FETCH_OBJ)) {
+						    
+						   $data = substr($result->data_hora, 0, 10); 
+							$hora = substr($result->data_hora, 11, 8); 
+
+							
+							
+							$data = explode("-", $data);
+							$data = $data[2]."/".$data[1]."/".$data[0];						   
+							?>
+
+						    <tr>
+								<td> <?php echo $result->titulo; ?> </td>
+								<td> <?php echo $result->ministrante; ?> </td>
+								<td> <?php echo $result->categoria; ?> </td>
+								
+							    <td> <?php echo $result->local; ?> </td>
+							    <td> <?php echo $data; ?> </td>
+							    <td> <?php echo $hora; ?> </td>
+							    <td> <?php echo $result->vagas; ?> </td>
+
+								<td> <a href='inscricao/?id=<? echo $result->id; ?>'>Inscrever-se</a></td>
+
+								<td> </td>
+						    </tr>
+					    <?php } ?>
+
 			        </tbody>
 			      </table>
 			</div>
 
 		</div> <!-- End of MAIN-CONTENT -->
-	
+	</div>
 	<footer>
 		<div class="content">
 			<div class="text-center"> 
@@ -126,5 +157,6 @@
 		<script src="../../res/lib/js/jquery.min.js"></script>
 		<script src="../../res/lib/js/bootstrap.min.js"></script>
 		<script src="../../res/js/script.js"></script>
+		
 	</body>
 </html>
