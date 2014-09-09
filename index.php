@@ -51,8 +51,7 @@
                                     <li><a href='view/minicursos/''>Mini Cursos</a></li>-->
                                     </ul>
                                     </li>
-                                    </li>";
-                                  
+                                    </li>"; 
                                 }
                                 else{
                                   echo ("<li><a href='view/cadastro/' id='cadastro'>Cadastrar</a></li>

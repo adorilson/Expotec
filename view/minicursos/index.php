@@ -70,29 +70,25 @@
 			</div>
 		</div> 
 		<div class="container main-content ">
-			
 			<br>
-		
-
 			<div class="alert col-md-12" >
 				<div class="row">
-				<br><br>
+					<br><br>
 				<!-- Table -->
-				<table class="table table-striped">
-					<thead>
-			          <tr>
-			            <th>Título</th>
-			            <th>Professor</th>
-						<th>Categoria</th>
-			            <th>Local</th>
-			            <th>Data</th>
-			            <th>Horário</th>
-			            <th>Vagas</th>
-			            <th>Inscrição</th>
-			          </tr>
-			        </thead>
-			        <tbody>
-			        	
+					<table class="table table-striped">
+						<thead>
+				          <tr>
+				            <th>Título</th>
+				            <th>Professor</th>
+							<th>Categoria</th>
+				            <th>Local</th>
+				            <th>Data</th>
+				            <th>Horário</th>
+				            <th>Vagas</th>
+				            <th>Inscrição</th>
+				          </tr>
+				      </thead>
+				      <tbody>
 					<?php 
 
 						if($_POST){
@@ -114,8 +110,8 @@
 						    }
 						    while ($result = $query->fetch(PDO::FETCH_OBJ)) {
 						    
-						   $data = substr($result->data_hora, 0, 10); 
-							$hora = substr($result->data_hora, 11, 8); 
+							   	$data = substr($result->data_hora, 0, 10); 
+								$hora = substr($result->data_hora, 11, 8); 
 
 							
 							
@@ -134,8 +130,6 @@
 							    <td> <?php echo $result->vagas; ?> </td>
 
 								<td> <a href='inscricao/?id=<? echo $result->id; ?>'>Inscrever-se</a></td>
-
-								<td> </td>
 						    </tr>
 					    <?php } ?>
 

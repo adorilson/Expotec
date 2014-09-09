@@ -3,7 +3,7 @@
 	session_start();
 	if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
 		$id = $_GET['id'];
-		$command = "SELECT * FROM atividade WHERE id = $id";
+		$command = "SELECT * FROM atividade WHERE id = $id AND nome = 'Palestra'" ;
 		try {
 			$query = $pdo->prepare($command);
 			$query->execute();
@@ -13,6 +13,7 @@
 		while($result = $query->fetch(PDO::FETCH_OBJ)){
 			$titulo 	= $result->titulo;
 			$descricao  = $result->descricao; 
+			$nome 		= $result->nome;
 		}	
 	}
 	else{
@@ -66,20 +67,75 @@
 		</header>
 		
 		<div class="container main-content">	
-			<div class="alert col-md-12" >  
-				<br><br>
-				<div>
+			<div class="alert col-md-12 descricao" >  
+				<div class="col-md-7 ">
 					<h3> Descrição: </h3>
 					<p>
-						<?php echo $descricao;?>
+						<?php echo $descricao."Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+												Aenean commodo ligula eget dolor. Aenean massa. 
+												Cum sociis natoque penatibus et magnis dis
+												 parturient montes, nascetur ridiculus mus.
+												  Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+												Aenean commodo ligula eget dolor. Aenean massa. 
+												Cum sociis natoque penatibus et magnis dis
+												 parturient montes, nascetur ridiculus mus.
+													Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+												Aenean commodo ligula eget dolor. Aenean massa. 
+												Cum sociis natoque penatibus et magnis dis
+												 parturient montes, nascetur ridiculus mus.
+												 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+												Aenean commodo ligula eget dolor. Aenean massa. 
+												Cum sociis natoque penatibus et magnis dis
+												 parturient montes, nascetur ridiculus mus.
+												 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
+												Aenean commodo ligula eget dolor. Aenean massa. 
+												Cum sociis natoque penatibus et magnis dis
+												 parturient montes, nascetur ridiculus mus.
+												
+												 " ;?>
 					</p>
-					<hr>
+					<br>
+						<form action="../../../php/functions.php">
+							<input type="submit"  name="" class="btn-success btn" value="Adicionar à minha lista">
+						</form>
 				</div>
-				<div>
-					Eu quero adicionar essa atividade a minha lista.
-					<br>
-					<br>
-					<button class="btn btn-success">Adicionar</button>
+				<div class="col-md-5 add_atividade">
+					<h3> Suas <?php echo $nome.'s';?>  </h3>
+					
+					<div class="div_atividades">
+						<ul class="nav_atividades nav nav-pills nav-stacked">
+							<li>
+								<a href="">
+									
+									<?php echo $titulo ?>
+									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									
+									<?php echo $titulo ?>
+									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									
+									<?php echo $titulo ?>
+									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
+								</a>
+							</li>
+							<li>
+								<a href="">
+									
+									<?php echo $titulo ?>
+									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
+								</a>
+							</li>
+						</ul>
+					</div>
+
+
 				</div>
 			</div>
 		</div> <!-- End of MAIN-CONTENT -->

@@ -70,10 +70,7 @@
 			</div>
 		</div> 
 		<div class="container main-content ">
-			
 			<br>
-		
-
 			<div class="alert col-md-12" >
 				<div class="row">
 				<br><br>
