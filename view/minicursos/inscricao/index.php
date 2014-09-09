@@ -1,7 +1,9 @@
 <?php  include_once '../../../php/connection.php'; ?>
 <?php 
-	$id = $_GET['id'];
-	$command = "SELECT * FROM atividade WHERE id = $id";
+	session_start();
+	if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+		$id = $_GET['id'];
+		$command = "SELECT * FROM atividade WHERE id = $id";
 		try {
 			$query = $pdo->prepare($command);
 			$query->execute();
@@ -9,8 +11,14 @@
 			echo $e->getMessage();
 		}
 		while($result = $query->fetch(PDO::FETCH_OBJ)){
-			$titulo = $result->titulo;
-		}
+			$titulo 	= $result->titulo;
+			$descricao  = $result->descricao; 
+			$data 		= $result->data;
+		}	
+	}
+	else{
+		header("Location:../../entrar");
+	}	
 ?>
 
 

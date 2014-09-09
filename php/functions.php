@@ -1,20 +1,143 @@
-<?php include 'connection.php'; ?>
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><title>carregando...</title>
-<script type='text/javascript'>
+<?php include_once 'connection.php'; ?>
 
-function login_right(){setTimeout("window.location='../pages/admin/post_activity.php'",2000);}
-function login_wrong(){setTimeout("window.location='authenticate_user.php'",2000);}
+<!DOCTYPE html> <html> <head> <link rel="stylesheet" href="../res/lib/css/bootstrap.min.css">
+<meta charset="utf-8"><meta http-equiv="X-UA-
+Compatible" content="IE=edge"><title>carregando...</title> <script
+type='text/javascript'>
+
+function login_right(){setTimeout("window.location='../'",1);}
+function login_wrong(){setTimeout("window.location='../view/entrar'",2000);}
 </script></head></html>
 
 
 <?php 
+			if(isset($_POST['cadastrar'])){
+				/* Pegando os valores por $_POST */
+				$nome 		= $_POST['nome'];
+				$senha 		= $_POST['senha'];
+				$cpf 		= $_POST['cpf'];
+				$tipo		= $_POST['tipo'];
+				//$matricula  = $_POST['matricula'];
+				
 
-	if(isset($_POST['select_user'])){
-		$user = $_POST['user'];
-		$pass = $_POST['pass'];
-		$command = "SELECT * FROM user WHERE (user=:user) AND (pass=:pass)";
+				if($tipo == "comunidade"){
+					$command = "INSERT INTO usuario (nome,senha,cpf,tipo) VALUES(:nome,:senha,:cpf,:tipo)";
+					try {
+						$query = $pdo->prepare($command);
+						$query->bindValue(":nome",$nome);
+						$query->bindValue(":senha",$senha);
+						$query->bindValue(":cpf",$cpf);
+						$query->bindValue(":tipo",0);
+						
+						$query->execute();
+						header("location:../");
+					} catch (Exception $ex) {
+						print $ex->getMessage();
+					}
+				}
+
+				else if($tipo == "aluno"){
+					$command = "INSERT INTO usuario (nome,senha,cpf,tipo) VALUES(:nome,:senha,:cpf,:tipo)";
+					try {
+						$query = $pdo->prepare($command);
+						$query->bindValue(":nome",$nome);
+						$query->bindValue(":senha",$senha);
+						$query->bindValue(":cpf",$cpf);
+						$query->bindValue(":tipo",1);
+						
+						$query->execute();
+						header("location:../");
+					} catch (Exception $ex) {
+						print $ex->getMessage();
+					}
+				}
+				else if($tipo == "professor"){
+					$command = "INSERT INTO usuario (nome,senha,cpf,tipo) VALUES(:nome,:senha,:cpf,:tipo)";
+					try {
+						$query = $pdo->prepare($command);
+						$query->bindValue(":nome",$nome);
+						$query->bindValue(":senha",$senha);
+						$query->bindValue(":cpf",$cpf);
+						$query->bindValue(":tipo",2);
+						
+						$query->execute();
+						header("location:../");
+					} catch (Exception $ex) {
+						print $ex->getMessage();
+					}
+				}
+			}	
+		
+			else if(isset($_POST['entrar'])){
+				$nome 		= $_POST['nome'];
+				$senha 		= $_POST['senha'];
+				//$matricula  = $_POST['matricula'];
+				
+				
+					$command = "SELECT * FROM  usuario WHERE (nome=:nome) AND (senha=:senha)";
+					try {
+						$query = $pdo->prepare($command);
+						$query->bindValue(":nome",$nome, PDO::PARAM_STR);
+						$query->bindValue(":senha",$senha, PDO::PARAM_STR);
+						$query->execute();
+						
+					} catch (Exception $ex) {
+						print $ex->getMessage();
+					}
+				
+				$row = $query->rowCount();
+				while($result = $query->fetch(PDO::FETCH_OBJ)){
+					session_start();
+					$_SESSION['nome'] = $result->nome;
+					$_SESSION['senha'] = $result->senha;
+					
+					echo "<script type='text/javascript'>login_right()</script>";
+				}
+				if($row < 1){
+					echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Algo deu errado!!
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											Você será redirecionado...<br><br>
+											<img style='opacity:0.6; ' width='50px' heigh='50px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+					echo "<script type='text/javascript'>login_wrong()</script>";
+					
+				}
+
+				}	
+			else if(!isset($_POST)){
+				header("Location:../");
+			}		
+				
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 		try{
 			$query = $pdo->prepare($command);
 			$query->bindValue(":user",$user, PDO::PARAM_STR);
@@ -22,7 +145,7 @@ function login_wrong(){setTimeout("window.location='authenticate_user.php'",2000
 			$query->execute();	
 		} catch (PDOException $e) {
 		echo "<h1>ERROR</h1>",$e->getMessage();
-	}
+		}
 	$row = $query->rowCount();
 	while($result = $query->fetch(PDO::FETCH_OBJ)){
 		session_start();
@@ -62,6 +185,6 @@ else if(isset($_POST['post-activity'])){
 	}
 }
 
-
+*/
 
  ?>

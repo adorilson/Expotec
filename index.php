@@ -1,3 +1,4 @@
+<?php include_once 'php/connection.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -24,23 +25,42 @@
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <!-- 
-                            <li><a href="view/palestras/"> Palestras</a></li>
-                            <li><a href="view/minicursos/">Mini Cursos</a></li>
-                            -->
+                        <ul class="nav navbar-nav navbar-left">
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Atividades<span class="caret"></span></a>
-                                 <ul class="dropdown-menu" role="menu">
-                                <li><a href="view/palestras/"> Palestras </a></li>
-                                <li class="divider"></li>
-                                <li><a href="view/minicursos/">Mini Cursos</a></li>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="view/palestras/">Palestras</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="view/minicursos/">Mini Cursos</a></li>
                                 </ul>
                             </li>
                             <li><a href="">Sobre</a></li>
-                            
-                            <li><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
+                            <li><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>  
                         </ul>
+                        <ul id="navUser" class="navbar-right navbar-nav nav">
+                            <?php 
+                                session_start();
+                                if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+                                    $user = $_SESSION['nome']; 
+                                    echo "
+                                    <li class='dropdown'>
+                                    <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
+                                    <ul class='dropdown-menu' role='menu'>
+                                    <li><a href='php/logout.php'>Sair</a></li>
+                                    <!--<li class='divider'></li>
+                                    <li><a href='view/minicursos/''>Mini Cursos</a></li>-->
+                                    </ul>
+                                    </li>
+                                    </li>";
+                                  
+                                }
+                                else{
+                                  echo ("<li><a href='view/cadastro/' id='cadastro'>Cadastrar</a></li>
+                                  <li><a href='view/entrar/'>Entrar</a></li>");  
+                                }
+                            ?>
+                        </ul>
+                             
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
             </nav>
@@ -70,16 +90,18 @@
             <h2 class=" title visible-sm visible-xs"> Novidades </h2> 
             <div class="alert col-md-8" >  
                 <h2>Conteúdo e Apresentação</h2>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                </p>
+                <div>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
+                    </p>
+                </div>
             </div>
         
             <div class="col-md-4">  

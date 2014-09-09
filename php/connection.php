@@ -6,8 +6,6 @@
 			echo "Banco de dados não existe...";
 		}
 	}
-
-	
  	
  ?>
 
