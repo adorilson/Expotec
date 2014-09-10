@@ -1,5 +1,5 @@
 
-<?php include_once '../../php/connection.php'; ?>
+<?php include_once '../../php/connection.php'; include_once '../../php/check.php';?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -36,6 +36,7 @@
                         </ul>
                     </li>
                     <li><a href="">Sobre</a></li>
+                    <li><a href="">Palestrantes</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 			      </div><!-- /.navbar-collapse -->

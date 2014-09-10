@@ -25,17 +25,17 @@
 
 							<div class="div-form">
 								<label for="nome">Nome:</label>
-								<input id="nome"name="nome"type="text" class="form-control input" required placeholder="nome completo...">	
+								<input id="nome"name="nome"type="text" class="form-control input" required placeholder="Nome e sobrenome...">	
 							</div>
 
 							<div class="div-form">
 								<label for="nome">Senha:</label>
-								<input name="senha" type="password" class="form-control input" required placeholder="números e letras...">
+								<input name="senha" type="password" class="form-control input" required placeholder="Números e letras...">
 							</div>
 
 							<div class="div-form">
 								<label for="nome">CPF:</label>
-								<input name="cpf"  id="cpf" type="text" class="form-control input"  required placeholder="seu cpf...">	
+								<input name="cpf"  id="cpf" type="text" class="form-control input"  required placeholder="Seu cpf...">	
 							</div>
 							
 							<div class="div-form">

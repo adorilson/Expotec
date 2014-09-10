@@ -1,9 +1,11 @@
-<?php  include_once '../../../php/connection.php'; ?>
+<?php  include_once '../../../php/connection.php'; include_once '../../../php/check.php'; ?>
 <?php 
 	session_start();
 	if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
-		$id = $_GET['id'];
-		$command = "SELECT * FROM atividade WHERE id = $id AND nome = 'Minicurso'";
+		$id_a = $_GET['id'];
+		$id_u = $_SESSION['id_u'];
+
+		$command = "SELECT * FROM atividade WHERE id = $id_a AND nome = 'Minicurso'";
 		try {
 			$query = $pdo->prepare($command);
 			$query->execute();
@@ -14,12 +16,14 @@
 			$titulo 	= $result->titulo;
 			$descricao  = $result->descricao; 
 			$nome 		= $result->nome;
+			$local 		= $result->local;	
 		}	
 	}
 	else{
 		header("Location:../../entrar");
-	}	
+	}						
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -28,8 +32,12 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<title> Inscreva-se  </title>
+
 		<link rel="stylesheet" href="../../../res/lib/css/bootstrap.min.css">
+		<link rel="stylesheet" href="../../../res/lib/css/bootstrap-responsive.min.css">
+		
 		<link rel="stylesheet" href="../../../res/css/style.css">
+
 	</head>
 	<body>
 		<header class="main-header container">
@@ -56,6 +64,7 @@
                         </ul>
                     </li>
                     <li><a href="">Sobre</a></li>
+                    <li><a href="">Palestrantes</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 			      </div><!-- /.navbar-collapse -->
@@ -92,42 +101,48 @@
 												Cum sociis natoque penatibus et magnis dis
 												 parturient montes, nascetur ridiculus mus.
 												
-												 " ;?>
+												 " ;
+						?>
 					</p>
 					<br>
-						<form action="../../../php/functions.php">
-							<input type="submit"  name="" class="btn-success btn" value="Adicionar à minha lista">
-						</form>
+					<div>
+						<a class="btn-success btn" href="../../../php/functions.php?id_u=<?php echo $id_u;?>&id_a=<?php echo $id_a;?>&activity=Minicurso">Adicionar à minha lista</a>
+					</div>
 				</div>
 				<div class="col-md-5 add_atividade">
-					<h3> Suas <?php echo $nome.'s';?>  </h3>
+					<h3> Seus <?php echo $nome.'s';?>  </h3>
 					
 					<div class="div_atividades">
 						<ul class="nav_atividades nav nav-pills nav-stacked">
-							<li>
-								<a href="">
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
-							<li>
-								<a href="">
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
-							<li>
-								<a href="">
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
-							<li>
-								<a href="">
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
+									<?php 
+									$comm = "SELECT  usuario_atividade.id, titulo, local, data_hora  FROM usuario, usuario_atividade, atividade WHERE usuario.id = usuario_atividade.usuario_id AND usuario_atividade.atividade_id = atividade.id AND atividade.nome = 'Minicurso' AND usuario.id = :id_u ORDER BY atividade.data_hora";
+									try {
+										$query = $pdo->prepare($comm);
+										$query->bindValue(":id_u",$id_u);
+										
+										$query->execute();		
+									} catch (PODException $ex) {
+										echo $ex;
+									}
+									while($result = $query->fetch(PDO::FETCH_OBJ)){
+									$t = $result->titulo;
+									$l = $result->local;
+									$d = substr($result->data_hora, 0, 10); 
+									$h = substr($result->data_hora, 11, 8); 
+
+									$d = explode("-", $d);
+									$d = $d[2]."/".$d[1]."/".$d[0];		
+								?>
+											
+									<li>
+										<a>
+											<?php echo $t." <small>($l)</small>" ?>
+											<button  data-dismiss="alert" class="close">&times;</button>
+											<p>Data: <?php echo $d." / Hora:".$h ?> </p>
+										</a>
+									</li>
+													
+							<?php }  ?>	
 						</ul>
 					</div>
 

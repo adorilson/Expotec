@@ -8,6 +8,10 @@ $(document).ready(function(){
 	$("#btn_cancel").click(function(){
 			window.location="../../";
 	});
+	$("#btn_cadastrar").click(function(){
+			window.location="../../view/cadastro/";
+	});
+
 	
 
 

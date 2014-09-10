@@ -10,6 +10,37 @@
 		<link rel="stylesheet" href="../../res/css/style.css">
 	</head>
 	<body class="body_login">
+		<header class="main-header container">
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+			  <div class="container">
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			        <span class="sr-only"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			      </button>
+			      <a class="navbar-brand" href="../../">Expotec</a>
+			    </div>
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+					 <li class="dropdown">
+			       	 	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Atividades<span class="caret"></span></a>
+			       	 	<ul class="dropdown-menu" role="menu">
+                        	<li><a href="../palestras/"> Palestras</a></li>
+                        	<li class="divider"></li>
+                        	<li><a href="../minicursos/">Mini Cursos</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="">Sobre</a></li>
+                    <li><a href="">Palestrantes</a></li>
+			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
+			       </ul>
+			      </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+		</header>
 		<h1 class="title_login"> Acesse sua conta... </h1>
 
 		<div class="container ">
@@ -40,7 +71,7 @@
 
 							<div class="div-form">
 								<input name="entrar" type="submit" class="btn btn-success input" value="Entrar">
-								<input type="button" id="btn_cancel" class="btn btn-danger input pull-right" value="Cancelar"  >
+								<input type="button" id="btn_cadastrar" class="btn btn-danger input pull-right" value="Sou novo">
 							</div>
 						</form>	
 					</div>

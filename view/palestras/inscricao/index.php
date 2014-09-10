@@ -1,9 +1,12 @@
-<?php  include_once '../../../php/connection.php'; ?>
+<?php  include_once '../../../php/connection.php';?>
 <?php 
-	session_start();
+	
+	session_start();	
 	if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
-		$id = $_GET['id'];
-		$command = "SELECT * FROM atividade WHERE id = $id AND nome = 'Palestra'" ;
+		$id_a = $_GET['id'];
+		$id_u = $_SESSION['id_u'];
+
+		$command = "SELECT * FROM atividade WHERE id = $id_a AND nome = 'Palestra'" ;
 		try {
 			$query = $pdo->prepare($command);
 			$query->execute();
@@ -14,11 +17,15 @@
 			$titulo 	= $result->titulo;
 			$descricao  = $result->descricao; 
 			$nome 		= $result->nome;
+			$local 		= $result->local;
 		}	
 	}
 	else{
 		header("Location:../../entrar");
-	}	
+	}
+
+	$date = date("d m y, H:i:s");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,6 +63,7 @@
                         </ul>
                     </li>
                     <li><a href="">Sobre</a></li>
+                    <li><a href="">Palestrantes</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 			      </div><!-- /.navbar-collapse -->
@@ -95,43 +103,56 @@
 												 " ;?>
 					</p>
 					<br>
-						<form action="../../../php/functions.php">
-							<input type="submit"  name="" class="btn-success btn" value="Adicionar à minha lista">
-						</form>
+					<div>
+						<a class="btn-success btn" href="../../../php/functions.php?id_a=<?php echo $id_a;?>&id_u=<?php echo $id_u;?>&activity=Palestra">Adicionar à minha lista</a>
+					</div>
 				</div>
 				<div class="col-md-5 add_atividade">
 					<h3> Suas <?php echo $nome.'s';?>  </h3>
 					
 					<div class="div_atividades">
 						<ul class="nav_atividades nav nav-pills nav-stacked">
-							<li>
-								<a href="">
+								<?php 
+									$comm = "SELECT  usuario_atividade.id, titulo, local, data_hora  FROM usuario, usuario_atividade, atividade WHERE usuario.id = usuario_atividade.usuario_id AND usuario_atividade.atividade_id = atividade.id AND atividade.nome = 'Palestra' AND usuario.id = :id_u ORDER BY atividade.data_hora";
+									try {
+										$query = $pdo->prepare($comm);
+										$query->bindValue(":id_u",$id_u);
+										$query->execute();			
+									} catch (PODException $ex) {
+										echo $ex;
+									}
+
+										$count = $query->rowCount();
+										if($count > 0){
+											
+										
+										while($result = $query->fetch(PDO::FETCH_OBJ)){
+											$t = $result->titulo;
+											$l = $result->local;
+											$d = substr($result->data_hora, 0, 10); 
+											$h = substr($result->data_hora, 11, 8); 
+
+											$d = explode("-", $d);
+											$d = $d[2]."/".$d[1]."/".$d[0];	
+
+											
+									?>
 									
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
-							<li>
-								<a href="">
+									<li>
+										<a>
+											<?php echo $t." <small>($l)</small>" ?>
+											<button  data-dismiss="alert" class="close">&times;</button>
+											<p>Data: <?php echo $d." / Hora:".$h ?> </p>
+										</a>
+									</li>
+
+									<?php } }
+									else{
+										echo "<h3 style='color:#AAA; text-align:center; font-size:100%;'>Nenhuma atividade ainda...</h3>";
+									}
+									?>
 									
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
-							<li>
-								<a href="">
-									
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
-							<li>
-								<a href="">
-									
-									<?php echo $titulo ?>
-									<p>Data: 26/09/2014 / Hora: 14:30:00</p>
-								</a>
-							</li>
+
 						</ul>
 					</div>
 

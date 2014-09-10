@@ -5,12 +5,23 @@
 Compatible" content="IE=edge"><title>carregando...</title> <script
 type='text/javascript'>
 
-function login_right(){setTimeout("window.location='../'",1);}
-function login_wrong(){setTimeout("window.location='../view/entrar'",2000);}
+function login_right(){
+	setTimeout("window.location='../'",1);
+}
+
+function login_wrong(){
+	setTimeout("window.location='../view/entrar/'",2000);
+}
+
+function add_activity(){
+	setTimeout("window.location='../view/palestras/",2000);
+}
+
 </script></head></html>
 
 
 <?php 
+
 			if(isset($_POST['cadastrar'])){
 				/* Pegando os valores por $_POST */
 				$nome 		= $_POST['nome'];
@@ -88,9 +99,9 @@ function login_wrong(){setTimeout("window.location='../view/entrar'",2000);}
 				$row = $query->rowCount();
 				while($result = $query->fetch(PDO::FETCH_OBJ)){
 					session_start();
-					$_SESSION['nome'] = $result->nome;
-					$_SESSION['senha'] = $result->senha;
-					
+					$_SESSION['nome'] 	= $result->nome;
+					$_SESSION['senha'] 	= $result->senha;
+					$_SESSION['id_u']	= $result->id;		
 					echo "<script type='text/javascript'>login_right()</script>";
 				}
 				if($row < 1){
@@ -114,7 +125,56 @@ function login_wrong(){setTimeout("window.location='../view/entrar'",2000);}
 					
 				}
 
-				}	
+			}
+
+			else if(isset($_GET)){
+				$id_a 		= $_GET['id_a'];
+				$id_u 		= $_GET['id_u'];
+				$activity 	= $_GET['activity']; 
+				 
+				//print "ID Usuário: ".$id_u; 
+				//print " <br>ID Atividade: ".$id_a;
+				$command = "INSERT INTO usuario_atividade (atividade_id, usuario_id) VALUES(:id_a,:id_u)";	
+			
+
+				try {
+					$query = $pdo->prepare($command);
+					$query->bindValue(":id_a",$id_a);
+					$query->bindValue(":id_u",$id_u);
+					$query->execute();
+
+
+					/* Selecionando a pagina de destino */ 
+					if($activity == 'Palestra'){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+											Salvando sua atividade...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+											Você será redirecionado...<br><br>
+											<img style='opacity:0.6; ' width='50px' heigh='50px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";
+						echo "<script type='text/javascript'>add_activity()</script>";
+						//header("Location:../view/palestras/");
+					}
+					else if($activity == 'Minicurso'){
+						header("Location:../view/minicursos/");		
+					}
+					/* mais atividades irão vir... */
+				} catch (PDOException $ex) {
+					echo $ex.getMessage();
+				}
+			}
+			
+
 			else if(!isset($_POST)){
 				header("Location:../");
 			}		

@@ -8,6 +8,9 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 		<title> Expotec </title>
 		<link rel="stylesheet" href="res/lib/css/bootstrap.min.css">
+        <link rel="stylesheet" href="res/lib/css/bootstrap-responsive.min.css">
+        
+        
 		<link rel="stylesheet" href="res/css/style.css">
 	</head>
 	<body>
@@ -35,6 +38,7 @@
                                 </ul>
                             </li>
                             <li><a href="">Sobre</a></li>
+                            <li><a href="">Palestrantes</a></li>
                             <li><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>  
                         </ul>
                         <ul id="navUser" class="navbar-right navbar-nav nav">
