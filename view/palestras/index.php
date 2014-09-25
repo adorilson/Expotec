@@ -1,4 +1,4 @@
-
+<!-- 
 <?php include_once '../../php/connection.php'; include_once '../../php/check.php';?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,8 +23,8 @@
 			        <span class="icon-bar"></span>
 			      </button>
 			      <a class="navbar-brand" href="../../">Expotec</a>
+			    
 			    </div>
-			    <!-- Collect the nav links, forms, and other content for toggling -->
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
 			        <li class="dropdown">
@@ -39,8 +39,31 @@
                     <li><a href="">Palestrantes</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
-			      </div><!-- /.navbar-collapse -->
-			  </div><!-- /.container-fluid -->
+					<ul id="navUser" class="navbar-right navbar-nav nav">
+                            <?php 
+                                session_start();
+                                if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+                                    $user = $_SESSION['nome']; 
+                                    echo "
+                                    <li class='dropdown'>
+                                    <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
+                                    <ul class='dropdown-menu' role='menu'>
+                                    	<li><a href=''>Minhas atividades</a></li>
+                                        <li class='divider'></li>
+                                        <li><a href=''>Configurações</a></li>
+                                        <li class='divider'></li>
+                                        <li><a href='php/logout.php'>Sair</a></li> </ul>
+                                    </li>
+                                    </li>"; 
+                                }
+                                else{
+                                  echo ("<li><a href='../cadastro/' id='cadastro'>Cadastrar</a></li>
+                                  <li><a href='../entrar/'>Entrar</a></li>");  
+                                }
+                            ?>
+                        </ul>
+			      </div>
+			  </div>
 			</nav>
 			
 			<h1 class=" title visible-md visible-lg "> Participe de palestras </h1>
@@ -52,19 +75,15 @@
 			<div class="row" >
 				<div class="container">
 					
-				<!-- Filtros dos sonhos -->	
 				<form class="form-inline pull-right" method="POST" action="#" role="form">
 				  <span id="search_title"> Agilize sua busca:</span>
-				  <div class="form-group">
-				 	<div class="input-group">
-				      <input class="form-control"  name="title_post" type="text" placeholder="Titulo...">
-				    </div>
-				  </div>
-				  <div class="form-group">
-				    <div class="input-group">
-				      <input class="form-control" name="categoria_post"  type="text" placeholder="Categorias...">
-				    </div>
-				  </div>
+				  
+					  <div class="form-group">
+					    <div class="input-group">
+					      <input id="seek" class="form-control" name="keyword"  type="text" placeholder="Titulos ou categorias">
+					    </div>
+					  </div>
+				  
 				  <button type="submit"  class="btn btn-success">Pesquisar</button>
 				</form>
 				</div>
@@ -75,7 +94,6 @@
 			<div class="alert col-md-12" >
 				<div class="row">
 				<br><br>
-				<!-- Table -->
 				<table class="table table-striped">
 					<thead>
 			          <tr>
@@ -94,9 +112,9 @@
 					<?php 
 
 						if($_POST){
-							$title = $_POST['title_post'];
-				        	$categoria = $_POST['categoria_post'];
-				        	$command = "SELECT * FROM atividade WHERE nome = 'Palestra' AND titulo LIKE '%$title%' AND categoria LIKE '%$categoria%'";
+							$keyword = $_POST['keyword'];
+				        	//$categoria = $_POST['categoria_post'];
+				        	$command = "SELECT * FROM atividade WHERE nome = 'Palestra' AND (titulo LIKE '%$keyword%' OR categoria LIKE '%$keyword%')";
 						  
 						}else{
 							$command = "SELECT * FROM atividade WHERE nome = 'Palestra'";	
@@ -127,7 +145,13 @@
 							    <td> <?php echo $data; ?> </td>
 							    <td> <?php echo $hora; ?> </td>
 							    <td> <?php echo $result->vagas; ?> </td>
-								<td> <a href='inscricao/?id=<? echo $result->id; ?>'>Inscrever-se</a></td>
+						
+
+								 <form action="inscricao/?id=<? echo $result->id; ?>" method="POST">
+									<td> <button class="insc btn " type="submit">Inscreva-se</button></td>
+						    	</form>
+
+
 						  </tr>
 					    <?php } ?>
 
@@ -135,7 +159,7 @@
 			      </table>
 			</div>
 
-		</div> <!-- End of MAIN-CONTENT -->
+		</div> 
 	</div>
 	<footer>
 		<div class="content">
@@ -152,3 +176,4 @@
 		
 	</body>
 </html>
+--> 

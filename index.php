@@ -1,4 +1,4 @@
-<?php include_once 'php/connection.php'; ?>
+<?php include_once 'php/connection.php';  session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -32,34 +32,50 @@
                             <li class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Atividades<span class="caret"></span></a>
                                 <ul class="dropdown-menu" role="menu">
-                                    <li><a href="view/palestras/">Palestras</a></li>
+                                    <li><a href="aviso/">Palestras</a></li>
                                     <li class="divider"></li>
-                                    <li><a href="view/minicursos/">Mini Cursos</a></li>
+                                    <li><a href="aviso/">Mini Cursos</a></li>
                                 </ul>
                             </li>
+                            <li><a href="aviso/">Palestrantes</a></li>
+                            <?php  
+                                if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+                                    $tipo = $_SESSION['tipo'];
+                                    
+                                    if($tipo == 2){
+                                        echo "<li><a href='view/submissoes/'>Submissões</a></li>";
+                                    }
+                                }  
+                            ?>
                             <li><a href="">Sobre</a></li>
-                            <li><a href="">Palestrantes</a></li>
                             <li><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>  
                         </ul>
                         <ul id="navUser" class="navbar-right navbar-nav nav">
                             <?php 
-                                session_start();
+                               
                                 if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
                                     $user = $_SESSION['nome']; 
                                     echo "
                                     <li class='dropdown'>
                                     <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
                                     <ul class='dropdown-menu' role='menu'>
-                                    <li><a href='php/logout.php'>Sair</a></li>
-                                    <!--<li class='divider'></li>
-                                    <li><a href='view/minicursos/''>Mini Cursos</a></li>-->
+                                        <li><a href=''>Minhas atividades</a></li>
+                                        <li class='divider'></li>
+                                        <li><a href=''>Configurações</a></li>
+                                        <li class='divider'></li>
+                                        <li><a href='php/logout.php'>Sair</a></li>
                                     </ul>
                                     </li>
                                     </li>"; 
                                 }
                                 else{
-                                  echo ("<li><a href='view/cadastro/' id='cadastro'>Cadastrar</a></li>
-                                  <li><a href='view/entrar/'>Entrar</a></li>");  
+                                  echo ("
+                                    <li>
+                                        <a href='view/cadastro' id='cadastro'>Cadastrar</a>
+                                    </li>
+                                    <li>
+                                        <a href='view/entrar'>Entrar</a>
+                                    </li>");  
                                 }
                             ?>
                         </ul>

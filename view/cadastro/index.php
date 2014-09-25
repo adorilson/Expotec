@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -16,7 +17,6 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-2 "></div>
-				<!-- Form cadastro -->
 				<div id="div_cadastro_login" class="col-md-8 alert cadastro">						
 					<h1> Cadastre-se  </h1>
 					<div class="row">
@@ -25,49 +25,48 @@
 
 							<div class="div-form">
 								<label for="nome">Nome:</label>
-								<input id="nome"name="nome"type="text" class="form-control input" required placeholder="Nome e sobrenome...">	
+								<input id="nome"name="nome"type="text" class="form-control inputNorm" required placeholder="Nome e sobrenome...">	
 							</div>
 
 							<div class="div-form">
 								<label for="nome">Senha:</label>
-								<input name="senha" type="password" class="form-control input" required placeholder="Números e letras...">
+								<input name="senha" type="password" class="form-control inputNorm" required placeholder="Números e letras...">
 							</div>
 
 							<div class="div-form">
 								<label for="nome">CPF:</label>
-								<input name="cpf"  id="cpf" type="text" class="form-control input"  required placeholder="Seu cpf...">	
+								<input name="cpf"  id="cpf" type="text" class="form-control inputNorm"  required placeholder="Seu cpf...">	
 							</div>
 							
 							<div class="div-form">
-								<select class="input" name="tipo" id="tipo">
+								<select class="inputNorm" name="tipo" id="tipo">
 									<option value="">Eu sou...</option>
 									<option id="aluno" name="aluno" value="aluno">Aluno do IFRN</option>
-									<option value="professor">Professor do IFRN</option>
-									<option value="comunidade">Comunidade</option>
+									<option id="prof" value="professor">Professor do IFRN</option>
+									<option id="comunidade" value="comunidade">Comunidade</option>
 								</select>
 							</div>
 							
-							<div id="div_matricula" class="div-form">
+							<div id="matricula" class="div-form">
 								<label >Matricula:</label>
-								<input name="matricula" type="text" class="form-control input" placeholder="Matricula">	
+								<input name="matricula" type="text" class="form-control inputNorm" placeholder="Matricula">	
 							</div>
 							<div class="div-form">
-								<input name="cadastrar" type="submit"  class="btn btn-success input" value="Salvar">
-								<input type="button" id="btn_cancel" class="btn btn-danger input pull-right" value="Cancelar"  >
+								<input name="cadastrar" type="submit"  class="btn btn-success inputNorm" value="Salvar">
+								<input type="button" id="btn_cancel" class="btn btn-danger inputNorm pull-right" value="Cancelar"  >
 							</div>
 						</form>	
 					</div>
 				</div>
 				</div>
 
-				<!-- End form cadastro -->
 				<div class="col-md-2"></div>
 			</div>
 		</div>
 
-		<!-- Imports javascript -->
 		<script src="../../res/lib/js/jquery.min.js"></script>
 		<script src="../../res/lib/js/bootstrap.min.js"></script>
 		<script src="../../res/js/script.js"></script>	
 	</body>
 </html>
+ 

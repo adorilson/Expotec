@@ -1,3 +1,4 @@
+<!-- 
 <?php  include_once '../../../php/connection.php';?>
 <?php 
 	
@@ -51,7 +52,7 @@
 			      </button>
 			      <a class="navbar-brand" href="../../../">Expotec</a>
 			    </div>
-			    <!-- Collect the nav links, forms, and other content for toggling -->
+			   
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
 					 <li class="dropdown">
@@ -66,8 +67,8 @@
                     <li><a href="">Palestrantes</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
-			      </div><!-- /.navbar-collapse -->
-			  </div><!-- /.container-fluid -->
+			      </div>
+			  </div>
 			</nav>
 
 			<h1 class=" title visible-md visible-lg "> <?php echo $titulo; ?> </h1>
@@ -140,8 +141,10 @@
 									
 									<li>
 										<a>
-											<?php echo $t." <small>($l)</small>" ?>
-											<button  data-dismiss="alert" class="close">&times;</button>
+											<form action="../../../php/functions.php?id_u=<?php echo $id_u;?>&id_a=<?php echo $id_a;?>&activity=Palestra"  method="post">
+												<button name="delete" class="close" type="submit">&times;</button>
+											</form>
+											<?php echo $t."<br> <small>($l)</small>" ?>
 											<p>Data: <?php echo $d." / Hora:".$h ?> </p>
 										</a>
 									</li>
@@ -150,16 +153,14 @@
 									else{
 										echo "<h3 style='color:#AAA; text-align:center; font-size:100%;'>Nenhuma atividade ainda...</h3>";
 									}
-									?>
-									
-
+								?>
 						</ul>
 					</div>
 
 
 				</div>
 			</div>
-		</div> <!-- End of MAIN-CONTENT -->
+		</div> 
 	
 	<footer>
 		<div class="content">
@@ -175,3 +176,4 @@
 		<script src="../../../res/js/script.js"></script>
 	</body>
 </html>
+ -->
