@@ -1,6 +1,11 @@
+
+<?php include_once '../php/connection.php'; ?>
+
+
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="shortcut icon" type="image/x-icon" href="http://portal.ifrn.edu.br/favicon.ico" />
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title> Admin </title>
@@ -12,7 +17,7 @@
 <body>
 	<div class="container">
 		<div class="row">
-			<h1 id="title-adm" class="title">Área do administrador</h1>
+			<h1 id="title-adm" class="title-adm">Área do administrador</h1>
 			<div class="col-md-3"></div>
 			
 			<div class="col-md-6">

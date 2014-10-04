@@ -5,16 +5,13 @@
 	Date : 16/08/2014 - 10:34:19 AM;
 	Title : Expotec;
 */
-*{margin:0;padding: 0;}  body{padding-top: 50px; color:#555;} .btn-success{border-radius: 0; }   .title {margin: 30px 0; color: #444;}a,a:link , a:visited{color: #5CB85C;} #search_title{ color: #888; font-size: 17px; margin-right: 10px; } hr{ border-top: 1px solid #CFCFCF; } .news{color: #E95350; } .alert{border-top: 3px solid #E98888;  background-color: #FAFAFA; box-shadow: 0 1px 1px #CCC; border-radius: 1px; padding: 0 3%;} footer .content{height: 127px;background-color: #FAFAFA;margin: 4% 0 0 0; padding: 2% 0 0 0; border-top: 1px solid #EEE;} img.slide-image {width: 100%;}table{margin: 0} .table tr{background-color: #FFF;box-shadow: none;} #search{ margin: 2% 0 4% 0 ; } .form-control:focus{ border-color:#44DD55; box-shadow: none; } .navbar{box-shadow: 0 1px 2px #777;}#navUser li #cadastro{color: #5CB85C;} #navUser li #cadastro:hover{color: #2C904C;} .div-form{margin: 4% 3%; width: 95%; } .inputNorm{color:#666; height: 40px;border-radius: 0;} .inputNorm[type="submit"] , .inputNorm[type="button"]{width: 42%;	color:#FFF;} .div-form select {background-color: #FFF;	color: #555;border: none;outline: none;box-shadow: 0 1px 1px #AAA;width: 42%; } #div_cadastro_login{padding: 1% 12%;}.title_login{text-align: center;font-size: 40px;margin: 4% 0 5% 0;} .descricao{	text-align: justify;padding: 1%;font-size:112%;	min-height: 200px;}.add_atividade{	border-left: 2px solid #DDD;min-height: 300px;}.div_atividades{max-height: 300px;overflow: auto;padding: 2%; background-color: #FFF;border: 1px solid #EEE;} .div_atividades ul li a{min-height: 90px;border-radius: 1px;color: #888;font-size: 120%;border-bottom: 1px solid #DDD;-webkit-transition: 0.5s;	 -o-transition: 0.5s; transition: 0.5s;	 padding-top: 15px;} .div_atividades ul li a:hover{	border-left: 3px solid #5CB85C;		background-color: #F6F6F6; cursor:default;}.div_atividades ul li p{color: #AAA;font-size: 80%;	margin-top: 10px;} a.btn{color: #FFF;}.close{outline: none;} small{color:#CCC; font-size: 80%;}.form-login{padding: 60px;}
+*{margin:0;padding: 0;}  body{padding-top: 50px; color:#555; font-size: 150%;} div.item {  max-height: 340px; } .btn-success , .btn-danger, .btn-warning, .btn-info, .btn-default {border-radius: 0; }   .title {margin: 30px 0; color: #444;}a,a:link , a:visited{color: #5CB85C;} #search_title{ color: #888; font-size: 17px; margin-right: 10px; } hr{ border-top: 1px solid #CFCFCF; } .news{color: #E95350; } .alert{border-top: 3px solid #E98888;  background-color: #FAFAFA; box-shadow: 0 1px 1px #CCC; border-radius: 1px; padding: 0 3%; min-height: 240px;} footer .content{height: 127px;background-color: #FAFAFA;margin: 4% 0 0 0; padding: 2% 0 0 0; border-top: 1px solid #EEE;} img.slide-image {background-size: 100%; width:100%;  }table{margin: 0; text-align: justify;} .table tr{background-color: #FFF;box-shadow: none;} #search{ margin: 2% 0 4% 0 ; } .form-control:focus{ border-color:#44DD55; box-shadow: none; } .navbar{box-shadow: 0 1px 2px #777;}#navUser li #cadastro{color: #5CB85C;} #navUser li #cadastro:hover{color: #2C904C;} .div-form{margin: 4% 3%; width: 95%; } .inputNorm{color:#666; height: 40px;border-radius: 0;} .inputNorm[type="submit"] , .inputNorm[type="button"] , .inputNorm[type="reset"] {width: 42%;	color:#FFF;} .div-form select {background-color: #FFF;	color: #555;border: none;outline: none;box-shadow: 0 1px 1px #AAA;width: 42%; } #div_cadastro_login{padding: 1% 12%;}.title_login{text-align: center;font-size: 40px;margin: 4% 0 5% 0;} .descricao{	text-align: justify;padding: 1%;font-size:112%;	min-height: 200px;}.add_atividade{	border-left: 2px solid #DDD;min-height: 300px;}.div_atividades{max-height: 300px;overflow: auto;padding: 2%; background-color: #FFF;border: 1px solid #EEE;} .div_atividades ul li a{min-height: 90px;border-radius: 1px;color: #888;font-size: 120%;border-bottom: 1px solid #DDD;-webkit-transition: 0.5s;	 -o-transition: 0.5s; transition: 0.5s;	 padding-top: 15px;} .div_atividades ul li a:hover{	border-left: 3px solid #5CB85C;		background-color: #F6F6F6; cursor:default;}.div_atividades ul li p{color: #AAA;font-size: 80%;	margin-top: 10px;} a.btn{color: #FFF;}.close{outline: none;} small{color:#CCC; font-size: 80%;}.form-login{padding: 60px;}
 
 
-
-
-button.insc{
-	border-radius: 0;
-	outline: none;
-	border: none;
-	padding:7px;
+.home-text p {
+	font-size: 17px;
+	text-align: justify;
+	margin-top: 20px;
 }
 
 #seek{
@@ -22,27 +19,41 @@ button.insc{
 }
 
 
+.insc{
+	width: 90px;
+}
+
 
 
 .body-submissions {
 	margin-top: 40px;
-	
+
 }
 
 .body-submissions  h1{
 	text-align: center;
 }
 
-
+.nav-submissions{
+	padding: 1%;
+	background-color: #EEE;
+	margin-bottom: 20px;
+	overflow: auto;
+	max-height: 400px;
+}
 
 .nav-submissions li{
 	list-style: none;
 	background-color: #FEFEFE;
 	height: 80px;
-	margin: 5px 0;
+	margin: 10px;
 	padding: 30px 20px;
 	text-align: left;
 	box-shadow: 0 1px 2px #BBB;
+}
+.nav-submissions li small{
+	font-size: 14px;
+	color: #888;
 }
 
 
@@ -52,7 +63,7 @@ button.insc{
 }
 
 .nav-submissions li a{
-	color: #888;
+	color: #666;
 	font: 20px Helvetica;
 	text-shadow:0 1px #EEE;
 }
@@ -64,7 +75,7 @@ button.insc{
 	outline: none;
 	border: 1px solid #BBB;
 	color:#666;
-
+	resize:none;
 }
 
 #resumo:focus{
@@ -81,6 +92,10 @@ button.insc{
 	border: 1px solid #5CB85C;
 }
 
+.div-form h4{
+
+	margin: 40px 0 10px 0;
+}
 
 
 /* Admin */
@@ -100,8 +115,9 @@ button.insc{
 }
 
 
-#title-adm{
+.title-adm{
 	text-align: center;
+	margin: 50px 0;
 }
 
 

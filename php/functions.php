@@ -1,8 +1,13 @@
 <?php include_once 'connection.php'; ?>
 
-<!DOCTYPE html> <html> <head> <link rel="stylesheet" href="../res/lib/css/bootstrap.min.css">
+<!DOCTYPE html> <html> <head> 
+<link rel="stylesheet" href="../res/lib/css/bootstrap.min.css">
+<link rel="stylesheet" href="../res/css/style.css">
+
 <meta charset="utf-8"><meta http-equiv="X-UA-
-Compatible" content="IE=edge"><title>Esperando resposta...</title> <script
+Compatible" content="IE=edge"><title>Aguarde...</title>
+
+ <script
 type='text/javascript'>
 
 /* LOGIN */
@@ -31,23 +36,48 @@ function add_palestra(){
 function add_minicurso(){
 	setTimeout("window.location='../view/minicursos/'",3000);
 }
-function cadastrar_palestra(){
+
+function cadastro_palestra(){
 	setTimeout("window.location='../view/submissoes/palestra'",3000);
+}
+function cadastro_palestra_fall(){
+	setTimeout("window.location='../view/submissoes/palestra'",5000);
+}
+function cadastro_minicurso(){
+	setTimeout("window.location='../view/submissoes/minicurso'",3000);
+}
+function cadastro_minicurso_fall(){
+	setTimeout("window.location='../view/submissoes/minicurso'",5000);
 }
 
-function cadastro_palestra_fall(){
-	setTimeout("window.location='../view/submissoes/palestra'",3000);
+
+function horario_minicurso_fall(){
+	setTimeout("window.location='../view/submissoes/minicurso'",1000);
 }
+function horario_palestra_fall(){
+	setTimeout("window.location='../view/submissoes/palestra'",1000);
+}
+
+
+function postar_noticia(){
+	setTimeout("window.location='../admin/noticias/'",3000);
+}
+function delete_noticia(){
+	var op = confirm("Dejesa deletar essa notícia?");
+	return op;
+}
+
+
 </script></head></html>
+
 <?php 
 
 			if(isset($_POST['cadastrar'])){
 				/* Pegando os valores por $_POST */
 				$nome 		= $_POST['nome'];
 				$senha 		= $_POST['senha'];
-				$cpf 		= $_POST['cpf'];
+				$email 		= $_POST['email'];
 				$tipo		= $_POST['tipo'];
-				//$matricula  = $_POST['matricula'];
 				
 
 				if($tipo == "comunidade"){
@@ -88,12 +118,12 @@ function cadastro_palestra_fall(){
 
 					else if($row < 1){
 
-					$command = "INSERT INTO usuario (nome,senha,cpf,tipo) VALUES(:nome,:senha,:cpf,:tipo)";
+					$command = "INSERT INTO usuario (nome,senha,email,tipo) VALUES(:nome,:senha,:email,:tipo)";
 					try {
 						$query = $pdo->prepare($command);
 						$query->bindValue(":nome",$nome);
 						$query->bindValue(":senha",$senha);
-						$query->bindValue(":cpf",$cpf);
+						$query->bindValue(":email",$email);
 						$query->bindValue(":tipo",0);
 						
 						$query->execute();
@@ -161,12 +191,12 @@ function cadastro_palestra_fall(){
 					else if($row < 1){
 
 
-						$command = "INSERT INTO usuario (nome,senha,cpf,tipo) VALUES(:nome,:senha,:cpf,:tipo)";
+						$command = "INSERT INTO usuario (nome,senha,email,tipo) VALUES(:nome,:senha,:email,:tipo)";
 						try {
 							$query = $pdo->prepare($command);
 							$query->bindValue(":nome",$nome);
 							$query->bindValue(":senha",$senha);
-							$query->bindValue(":cpf",$cpf);
+							$query->bindValue(":email",$email);
 							$query->bindValue(":tipo",1);
 							
 							$query->execute();
@@ -237,12 +267,12 @@ function cadastro_palestra_fall(){
 					else if($row < 1){
 
 
-					$command = "INSERT INTO usuario (nome,senha,cpf,tipo) VALUES(:nome,:senha,:cpf,:tipo)";
+					$command = "INSERT INTO usuario (nome,senha,email,tipo) VALUES(:nome,:senha,:email,:tipo)";
 					try {
 						$query = $pdo->prepare($command);
 						$query->bindValue(":nome",$nome);
 						$query->bindValue(":senha",$senha);
-						$query->bindValue(":cpf",$cpf);
+						$query->bindValue(":email",$email);
 						$query->bindValue(":tipo",2);
 						
 						$query->execute();
@@ -278,7 +308,6 @@ function cadastro_palestra_fall(){
 			else if(isset($_POST['entrar'])){
 				$nome 		= $_POST['nome'];
 				$senha 		= $_POST['senha'];
-				//$matricula  = $_POST['matricula'];
 				
 				
 					$command = "SELECT * FROM  usuario WHERE (nome=:nome) AND (senha=:senha)";
@@ -297,9 +326,10 @@ function cadastro_palestra_fall(){
 					session_start();
 					$_SESSION['nome'] 	= $result->nome;
 					$_SESSION['senha'] 	= $result->senha;
+					$_SESSION['email'] 	= $result->email;
 					$_SESSION['id_u']	= $result->id;
 					$_SESSION['tipo']	= $result->tipo;		
-					echo "<p style='margin: 7px 7px;'> Aguardando... </p>";
+					echo "<p style='margin: -40px 7px;'> Aguardando... </p>";
 					echo "<script type='text/javascript'>login_right()</script>";
 				}
 				if($row < 1){
@@ -328,39 +358,42 @@ function cadastro_palestra_fall(){
 
 			/*---------------------- DELETE ACTIVITY  -----------------------*/
 
-			else if(isset($_POST['delete'])){
-				$activity = $_GET['activity'];
-
-				if($activity == "Minicurso"){
-					header("Location:../view/minicursos/");
-				}
-				else if($activity == "Palestra"){
-					header("Location:../view/palestras/");	
-				}
-
-				/*
-				$id_a = $_GET['id_a'];
+			else if(isset($_POST['remove_activity'])){
+				$activity = $_GET['activity'];	
+				$id 	= $_GET['id'];
+				$id_a 	= $_GET['id_a'];
+			
 				
-				$command = "DELETE FROM usuario_atividade WHERE ativdade_id=:id_a AND usuario_id =:id_u";
-				$upVagas = "UPDATE atividade SET vagas = vagas+1 WHERE id = $id_a";
-				*/
-
+				
+				
 				try {
-					/*
-					$query = $pdo->prepare($command);
-					$upVagasQuery 	= $pdo->prepare($upVagas);
+					$command = "DELETE FROM usuario_atividade WHERE id = :id";
+					$upVagas = "UPDATE atividade SET vagas = vagas+1 WHERE id = :id_a";
+					
 
-					$query->bindValue(":id_u",$id_u);
-					$query->bindValue(":id_a",$id_a);
+					$query = $pdo->prepare($command);
+					
+					$query->bindValue(":id",$id);
+					
+						
+					$upVagasQuery = $pdo->prepare($upVagas);
+					$upVagasQuery->bindValue(":id_a",$id_a);
 
 					$query->execute();
 					$upVagasQuery->execute();
-					*/
 					
 				} catch (PODException $ex) {
 					echo $ex->getMessage();
 				}
 				
+				if($activity == "minicurso"){
+					header("Location: ../view/minicursos/");
+				}
+
+				else if($activity == "palestra"){
+					header("Location: ../view/palestras/");	
+				}
+
 
 
 			}
@@ -371,7 +404,7 @@ function cadastro_palestra_fall(){
 			/*---------------------- ADD ACTIVITY AT USER'S LIST  -----------------------*/
 
 
-			else if(isset($_GET['id_a']) &&  isset($_GET['id_u'])){
+			else if(isset($_POST['add_activity'])  &&  isset($_GET['id_a']) &&  isset($_GET['id_u'])){
 				$id_a 		= $_GET['id_a'];
 				$id_u 		= $_GET['id_u'];
 				$activity 	= $_GET['activity']; 
@@ -388,17 +421,18 @@ function cadastro_palestra_fall(){
 					$query->bindValue(":id_a",$id_a);
 					$query->bindValue(":id_u",$id_u);
 					
+					
 					$query->execute();
 					$upVagasQuery->execute();
 
 
 					/* Selecionando a pagina de destino */ 
-					if($activity == 'Palestra'){
+					if($activity == 'palestra'){
 							echo "
 							<div class='container' style='width:50%; margin-top:10%;' >
 								<div class='row' >
 									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+										<p style='text-align:center; font: normal 320% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
 											Salvando sua atividade...
 										</p>
 										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
@@ -413,12 +447,12 @@ function cadastro_palestra_fall(){
 						echo "<script type='text/javascript'>add_palestra()</script>";
 						
 					}
-					else if($activity == 'Minicurso'){
+					else if($activity == 'minicurso'){
 							echo "
 							<div class='container' style='width:50%; margin-top:10%;' >
 								<div class='row' >
 									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+										<p style='text-align:center; font: normal 320% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
 											Salvando sua atividade...
 										</p>
 										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
@@ -438,53 +472,404 @@ function cadastro_palestra_fall(){
 				}
 			}
 			
-			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'Palestra'){
 
-				try {
-						
+			/* SUBMISSION PALESTRA  */
+			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'palestra'){
+				try {	
 					$usuario 	= $_GET['User'];
 					$tipo		= $_GET['Atividade'];
-
+					
 					$titulo 	= $_POST['titulo'];
 					$softwares 	= $_POST['softwares'];
 					$resumo 	= $_POST['resumo'];
 					$dia		= $_POST['dia'];
-
 					$local		= $_POST['local'];
 					$vagas		= $_POST['vagas'];
 					
-					/* Only to calc */
-					$inicio 	= $_POST['init_horario'];
-					$termino	= $_POST['end_horario'];
-					
-					$dia_hora 	= $dia.'/'.$inicio; 
-					
 
-					$h_ini = explode(":", $inicio);
-					$h_end = explode(":", $termino);
+					$horario1  	= $_POST['horario1'];
+					$horario2  	= $_POST['horario2'];
+					$horario3  	= $_POST['horario3']; 
 					
-					$hora 	= ($h_end[0] - $h_ini[0]);	
-					$minuto = ($h_end[1] - $h_ini[1]);
-					
-							
-					
-					if(($hora <= 1 && $hora > 0)){
-						if($h_ini[1] > $h_end[1]){
-							$hora 	= 0 ;	
-							$minuto = ($h_ini[1] + $h_end[1]);
-							
-							if($minuto >= 60){
-								$hora 	 = 0;
-								$minuto  =  (60 - $h_ini[1]) + $h_end[1];
-							
-								/*  Inserir */
-								$duracao = $hora.":".$minuto;
+					$dia_hora 	= null;
 
-								$command = "INSERT INTO atividades (tipo, titulo, descricao, ministrante,local, vagas,  dia_hora, status, softwares) 
-								VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora, 0, :softwares)";	
-								
+					/* Hour 1 */
+					if($horario2 == '' && $horario3 == ''){
+						$hora  = explode("/",$horario1); 
+						$dia_hora 	= $dia.'-'.$hora[0];
+					
+						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
+						$queryCheck = $pdo->prepare($check); 
+						$queryCheck->bindValue(":dia_hora",$dia_hora);
+						$queryCheck->bindValue(":tipo",$tipo);
+						
+						$queryCheck->execute();
+						$row = $queryCheck->rowCount();
+
+						if($row > 0){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Horário indisponível...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>horario_palestra_fall()</script>";
+						}
+						else{
+							$command = "INSERT INTO atividade (tipo,titulo ,softwares,descricao,ministrante,local,vagas,dia_hora,status)
+								 VALUES (:tipo, :titulo,:softwares , :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
+									
+							$query 	 = $pdo->prepare($command);
+							$query->bindValue(":tipo",$tipo);
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":softwares",$softwares);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":ministrante",$usuario);
+							$query->bindValue(":local",$local);
+							$query->bindValue(":vagas",$vagas);
+							$query->bindValue(":dia_hora",$dia_hora);
+							
+							$query->execute();	
+
+
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Salvando palestra...
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>
+											
+										</div>
+									</div>
+								</div>
+								";
+							echo "<script type='text/javascript'>cadastro_palestra()</script>";
+						}
+
+					}
+					/* Hour 2 */
+					else if($horario1 == '' && $horario3 == ''){
+						$hora  = explode("/", $horario2);
+						$dia_hora 	= $dia.'-'.$hora[0];
+					
+							
+						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
+						$queryCheck = $pdo->prepare($check); 
+						$queryCheck->bindValue(":dia_hora",$dia_hora);
+						$queryCheck->bindValue(":tipo",$tipo);
+						
+						$queryCheck->execute();
+						$row = $queryCheck->rowCount();
+
+						if($row > 0){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Horário indisponível...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>horario_palestra_fall()</script>";
+						}
+						else{
+							$command = "INSERT INTO atividade (tipo,titulo ,softwares,descricao,ministrante,local,vagas,dia_hora,status)
+								 VALUES (:tipo, :titulo,:softwares , :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
+									
+							$query 	 = $pdo->prepare($command);
+							$query->bindValue(":tipo",$tipo);
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":softwares",$softwares);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":ministrante",$usuario);
+							$query->bindValue(":local",$local);
+							$query->bindValue(":vagas",$vagas);
+							$query->bindValue(":dia_hora",$dia_hora);
+							
+							$query->execute();	
+
+
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Salvando palestra...
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>
+											
+										</div>
+									</div>
+								</div>
+								";
+							echo "<script type='text/javascript'>cadastro_palestra()</script>";
+						}
+
+					}
+
+					/* Hour 3 */
+					else if($horario1 == '' && $horario2 == ''){
+
+						$hora  = explode("/", $horario3);
+						$dia_hora 	= $dia.'-'.$hora[0];
+						
+						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
+						$queryCheck = $pdo->prepare($check); 
+						$queryCheck->bindValue(":dia_hora",$dia_hora);
+						$queryCheck->bindValue(":tipo",$tipo);
+						
+						$queryCheck->execute();
+						$row = $queryCheck->rowCount();
+
+						if($row > 0){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Horário indisponível...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>horario_palestra_fall()</script>";
+						}
+							else{
+								$command = "INSERT INTO atividade (tipo,titulo ,softwares,descricao,ministrante,local,vagas,dia_hora,status)
+									 VALUES (:tipo, :titulo,:softwares , :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
+										
 								$query 	 = $pdo->prepare($command);
+								$query->bindValue(":tipo",$tipo);
+								$query->bindValue(":titulo",$titulo);
+								$query->bindValue(":softwares",$softwares);
+								$query->bindValue(":resumo",$resumo);
+								$query->bindValue(":ministrante",$usuario);
+								$query->bindValue(":local",$local);
+								$query->bindValue(":vagas",$vagas);
+								$query->bindValue(":dia_hora",$dia_hora);
+								
+								$query->execute();	
 
+
+
+								echo "
+									<div class='container' style='width:50%; margin-top:10%;' >
+										<div class='row' >
+											<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+												<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+													Salvando palestra...
+												</p>
+												<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+													Você será redirecionado...<br><br>
+													<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+												</p>
+												
+											</div>
+										</div>
+									</div>
+									";
+								echo "<script type='text/javascript'>cadastro_palestra()</script>";
+							}
+
+					}
+					else{
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Talvez você esteja marcando mais de um horário...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>cadastro_palestra_fall()</script>";
+					}
+					
+
+	
+				} catch (PDOException $e) {
+					echo $e.getMessage();
+				}
+				
+			}
+
+
+			/* SUBMISSION MINICURSO  */
+
+			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'minicurso'){
+				try {	
+					$usuario 	= $_GET['User'];
+					$tipo		= $_GET['Atividade'];
+
+					$titulo 	= $_POST['titulo'];
+					$resumo 	= $_POST['resumo'];
+					$dia		= $_POST['dia'];
+					$local		= $_POST['local'];
+					$vagas		= $_POST['vagas'];
+					
+
+					$horario1  	= $_POST['horario1'];
+					$horario2  	= $_POST['horario2'];
+					$horario3  	= $_POST['horario3']; 
+					
+					$dia_hora 	= null;
+
+
+
+					/* Hour 1 */
+					if($horario2 == '' && $horario3 == ''){
+						$hora  = explode("/",$horario1); 
+						$dia_hora 	= $dia.'-'.$hora[0];
+					
+						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
+						$queryCheck = $pdo->prepare($check); 
+						$queryCheck->bindValue(":dia_hora",$dia_hora);
+						$queryCheck->bindValue(":tipo",$tipo);
+						
+						$queryCheck->execute();
+						$row = $queryCheck->rowCount();
+						
+						if($row > 0){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Horário indisponível...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>horario_minicurso_fall()</script>";
+						}
+						else{
+
+							
+							$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,local,vagas,dia_hora,status)
+								 VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
+									
+							$query 	 = $pdo->prepare($command);
+							$query->bindValue(":tipo",$tipo);
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":ministrante",$usuario);
+							$query->bindValue(":local",$local);
+							$query->bindValue(":vagas",$vagas);
+							$query->bindValue(":dia_hora",$dia_hora);
+							
+							$query->execute();	
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Salvando minicurso...
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>
+											
+										</div>
+									</div>
+								</div>
+								";
+							echo "<script type='text/javascript'>cadastro_minicurso()</script>";
+						}
+					}	
+					/* Hour 2 */
+					else if($horario1 == '' && $horario3 == ''){
+						$hora  = explode("/", $horario2);
+						$dia_hora 	= $dia.'-'.$hora[0];
+					
+
+						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
+						$queryCheck = $pdo->prepare($check); 
+						$queryCheck->bindValue(":dia_hora",$dia_hora);
+						$queryCheck->bindValue(":tipo",$tipo);
+						
+						$queryCheck->execute();
+						$row = $queryCheck->rowCount();
+						
+						if($row > 0){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Horário indisponível...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>horario_minicurso_fall()</script>";
+						}
+						else{
+
+								$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,local,vagas,dia_hora,status)
+									 VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
+										
+								$query 	 = $pdo->prepare($command);
 								$query->bindValue(":tipo",$tipo);
 								$query->bindValue(":titulo",$titulo);
 								$query->bindValue(":resumo",$resumo);
@@ -492,194 +877,108 @@ function cadastro_palestra_fall(){
 								$query->bindValue(":local",$local);
 								$query->bindValue(":vagas",$vagas);
 								$query->bindValue(":dia_hora",$dia_hora);
-								$query->bindValue(":softwares",$softwares);
+								
+								$query->execute();
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Salvando minicurso...
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>
+											
+										</div>
+									</div>
+								</div>
+								";
+							echo "<script type='text/javascript'>cadastro_minicurso()</script>";
+						
+						}
+					}
+
+						/* Hour 3 */
+					else if($horario1 == '' && $horario2 == ''){
+						$hora 	= explode("/", $horario3) ;
+						$dia_hora 	= $dia.'-'.$hora[0];
+						
+
+						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
+						$queryCheck = $pdo->prepare($check); 
+						$queryCheck->bindValue(":dia_hora",$dia_hora);
+						$queryCheck->bindValue(":tipo",$tipo);
+						
+						$queryCheck->execute();
+						$row = $queryCheck->rowCount();
+						
+						if($row > 0){
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Horário indisponível...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";	
+						echo "<script type='text/javascript'>horario_minicurso_fall()</script>";
+						}
+						else{
+
+								$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,local,vagas,dia_hora,status)
+									 VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
+										
+								$query 	 = $pdo->prepare($command);
+								$query->bindValue(":tipo",$tipo);
+								$query->bindValue(":titulo",$titulo);
+								$query->bindValue(":resumo",$resumo);
+								$query->bindValue(":ministrante",$usuario);
+								$query->bindValue(":local",$local);
+								$query->bindValue(":vagas",$vagas);
+								$query->bindValue(":dia_hora",$dia_hora);
 								
 
-								$query->execute();
-								/* Inserir */	
-								echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Salvando palestra...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											Você será redirecionado...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
+							$query->execute();
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Salvando minicurso...
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>
+											
+										</div>
 									</div>
 								</div>
-							</div>
-							";
-							echo "<script type='text/javascript'>cadastrar_palestra()</script>";		
-					
-
-							}
-							else if($minuto < 60){
-								$minuto =  (60 - $h_ini[1]) + $h_end[1]; 
+								";	
+							echo "<script type='text/javascript'>cadastro_minicurso()</script>";
 						
-							/* Inserir */
-							$duracao = $hora.":".$minuto;
-
-							$command = "INSERT INTO submissoes (titulo, ministrante, tipo, descricao, softwares, dia, duracao, status) VALUES (:titulo, :ministrante, 'Palestra', :resumo, :softwares, :dia, :duracao, 'pendente')";	
-							$query 	 =  $pdo->prepare($command);
-
-							$query->bindValue(":titulo",$titulo);
-							$query->bindValue(":ministrante",$usuario);
-							$query->bindValue(":softwares",$softwares);
-							$query->bindValue(":resumo",$resumo);
-							$query->bindValue(":dia",$dia);
-							$query->bindValue(":duracao",$duracao);
-
-							$query->execute();
-							/* Inserir */
-
-								echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Salvando palestra...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											Você será redirecionado...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";
-							echo "<script type='text/javascript'>cadastrar_palestra()</script>";			
-
-							}	
 						}
-						else if($h_end[1] == $h_ini[1]){
-							
-							/* Inserir */
-							$duracao = $hora.":".$minuto;
-
-							$command = "INSERT INTO submissoes (titulo, ministrante, tipo, descricao, softwares, dia, duracao, status) VALUES (:titulo, :ministrante, 'Palestra', :resumo, :softwares, :dia, :duracao, 'pendente')";	
-							$query 	 =  $pdo->prepare($command);
-
-							$query->bindValue(":titulo",$titulo);
-							$query->bindValue(":ministrante",$usuario);
-							$query->bindValue(":softwares",$softwares);
-							$query->bindValue(":resumo",$resumo);
-							$query->bindValue(":dia",$dia);
-							$query->bindValue(":duracao",$duracao);
-
-
-							$query->execute();
-							/* Inserir */
-
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Salvando palestra...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											Você será redirecionado...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";
-						echo "<script type='text/javascript'>cadastrar_palestra()</script>";						
-						}else {
-								echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Verifique o horario!!
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-					echo "<script type='text/javascript'>cadastro_palestra_fall()</script>";
-					
-						}	
-					}
-					else if($hora == 0 ){
-						if($h_end[1] == $h_ini[1]){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Verifique o horario!!
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-					echo "<script type='text/javascript'>cadastro_palestra_fall()</script>";
-					
-						}
-						else {
-
-						/* Inserir */
-						$duracao = $hora.":".$minuto;
-
-						$command = "INSERT INTO submissoes (titulo, ministrante, tipo, descricao, softwares, dia, duracao, status) VALUES (:titulo, :ministrante, 'Palestra', :resumo, :softwares, :dia, :duracao, 'pendente')";	
-						$query 	 =  $pdo->prepare($command);
-
-						$query->bindValue(":titulo",$titulo);
-						$query->bindValue(":ministrante",$usuario);
-						$query->bindValue(":softwares",$softwares);
-						$query->bindValue(":resumo",$resumo);
-						$query->bindValue(":dia",$dia);
-						$query->bindValue(":duracao",$duracao);
-		
-						$query->execute();	
-
-						/* Inserir */
-
+					}	
+					else{
 						echo "
 							<div class='container' style='width:50%; margin-top:10%;' >
 								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Salvando palestra...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											Você será redirecionado...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";
-						//echo "<script type='text/javascript'>cadastrar_palestra()</script>";		
-							
-						}
-					}
-					else{
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
 									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Verifique o horario!!
+										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
+										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Talvez você esteja marcando mais de um horário...
 										</p>
 										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
 											carregando...<br><br>
@@ -690,17 +989,16 @@ function cadastro_palestra_fall(){
 								</div>
 							</div>
 							";	
-							echo "<script type='text/javascript'>cadastro_palestra_fall()</script>";
-						
-					}			
-						
-					
-				} catch (PDOException $e) {
-					echo $e->getMessage();
-				}
+						echo "<script type='text/javascript'>cadastro_minicurso_fall()</script>";
+					}
 
+				} catch (PDOException $e) {
+					echo $e.getMessage();
+				}
+				
 			}
-			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'Minicurso'){}
+				/* ...  MORE ... */
+
 
 
 
@@ -721,82 +1019,135 @@ function cadastro_palestra_fall(){
 				} catch (PODException $e) {
 					echo $e.getMessage();
 				}
-
-				while($result = $query->fetch(PDO::FETCH_OBJ)){
-					header("Location: perfil/");
+				$row = $query->rowCount();
+				if($row > 0){
+					session_start();
+					while($result = $query->fetch(PDO::FETCH_OBJ)){
+						
+						$_SESSION['user'] = $result->user;
+						$_SESSION['pass'] = $result->pass;	 
+					}
+					header("Location:../admin/submissoes");
+				}
+				else{
+					header("Location:../");
 				}
 
 			}	
-			else if(!isset($_POST)){
+
+
+			else if(isset($_POST['update_status_activity'])){
+				$id = $_GET['id'];
+
+				try {
+					$ckeck = "SELECT * FROM atividade WHERE id = $id";
+					$checkStatus = $pdo->prepare($ckeck);
+					$checkStatus->execute();
+
+					while($result = $checkStatus->fetch(PDO::FETCH_OBJ)){
+						
+						$status = $result->status;
+
+					}
+
+					if($status == 0){
+						$command = "UPDATE  atividade SET  status = 1 WHERE  id = :id";
+						$query = $pdo->prepare($command);
+						$query->bindValue(":id",$id);
+						$query->execute();
+						header("Location:../admin/submissoes");	
+					}
+					else if($status == 1){
+						$command = "UPDATE  atividade SET  status = 0 WHERE  id = :id";
+						$query = $pdo->prepare($command);
+						$query->bindValue(":id",$id);
+						$query->execute();
+						header("Location:../admin/submissoes");
+					}
+					
+					
+				} catch (PDOException $e) {
+					echo $e.getMessage();
+				}
+			}
+
+			/*  POST NEWS */
+			else if(isset($_POST['postar_noticia'])){
+				$titulo = $_POST['titulo'];
+				$texto 	= $_POST['texto'];
+				$dx 	= date('d,m,y');
+				$d  	= explode(',', $dx);
+				$date 	= $d[0]."/".$d[1]."/".$d[2]; 
+				
+				try {
+					$command = "INSERT INTO noticia (titulo, texto, data) VALUES(:titulo,:texto,:data)";
+					$query = $pdo->prepare($command);
+
+					$query->bindValue(":titulo",$titulo);
+					$query->bindValue(":texto",$texto);
+					$query->bindValue(":data",$date);
+
+					$query->execute();
+
+
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+											Postando noticía...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+											Você será redirecionado...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";
+						echo "<script type='text/javascript'>postar_noticia()</script>";
+
+
+
+				} catch (PDOException $e) {
+					echo $e->getMessage();
+				}
+			}
+			else if(isset($_POST['delete_news']) || $_GET['id']){
+				$id 	= $_GET['id']; 
+				try {
+					$command = "DELETE FROM noticia WHERE id = :id";
+					$query 	 = $pdo->prepare($command);
+					$query->bindValue(":id",$id); 
+					 if(isset($_POST['confirm_delete'])){
+					 	$query->execute();
+					 	header("Location: ../admin/noticias/");
+					 }
+					 ?>
+						<body>
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div style='background: #EEE; height:300px; padding:7%; box-shadow:0 1px 2px #999; border-top: 5px solid #E34545'>
+										<form method="post">
+											<h1 class="title-adm">Deletar notícia?</h1>
+											<input name="confirm_delete" type="submit" class=" inputNorm btn btn-success" value="Deletar">
+											<a href="../admin/noticias/" ><input class="form-control inputNorm btn btn-danger pull-right" type="button" value="Cancelar"></a>
+										</form>
+										
+									</div>
+								</div>
+							</div>
+
+						</body>
+				<?php 
+				} catch (PDOException $e) {
+					echo $e->getMessage();
+				}	
+			}
+
+			else{
 				header("Location:../");
 			}		
 				
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-		try{
-			$query = $pdo->prepare($command);
-			$query->bindValue(":user",$user, PDO::PARAM_STR);
-			$query->bindValue(":pass",$pass, PDO::PARAM_STR);
-			$query->execute();	
-		} catch (PDOException $e) {
-		echo "<h1>ERROR</h1>",$e->getMessage();
-		}
-	$row = $query->rowCount();
-	while($result = $query->fetch(PDO::FETCH_OBJ)){
-		session_start();
-		$_SESSION['user'] = $result->user;
-		$_SESSION['pass'] = $result->pass;
-	echo "<h1 style='text-align:center; margin-top:20%;font: normal 250% Arial; font-weight:300; color:#666;'>Wating...</h1>";	
-	echo "<script type='text/javascript'>login_right()</script>";
-	}
-	if($row < 1){
-		echo "<p style='text-align:center; font: normal 180% Arial; font-weight:300; color:#444;'>Wrong!</p>";
-		echo "<p style='text-align:center; font: normal 120% Arial; font-weight:300; color:#444;'>You will be redirected...</p>";	
-		echo "<script type='text/javascript'>login_wrong()</script>";
-		
-	}
-}
-
-
-
-else if(isset($_POST['post-activity'])){
-	$num = $_POST['number'];
-	$title = $_POST['title'];
-	$data = $_POST['date'];
-	$description = $_POST['description'];
-	$link = $_POST['link'];
-	$command = "INSERT INTO activity (numero,nome,data,descricao,link) VALUES(:num,:title,:data,:description,:link)";
-	try {
-		$query = $pdo->prepare($command);
-		$query->bindValue(":num",$num);
-		$query->bindValue(":title",$title);
-		$query->bindValue(":data",$data);
-		$query->bindValue(":description",$description);
-		$query->bindValue(":link",$link);
-		$query->execute();
-		header("location:../pages/admin/post_activity.php");
-	} catch (PDOException $e) {
-		echo $e->getMesage();
-	}
-}
-
-*/
-
  ?>

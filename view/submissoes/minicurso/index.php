@@ -1,29 +1,30 @@
 <?php include_once '../../../php/connection.php'; ?>
 <?php 
     session_start();
-    if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
-      
-         
+
+    if(isset($_SESSION['nome']) && isset($_SESSION['senha']) ) {
+        $tipo = $_SESSION['tipo'];
     }
     else{
         header("Location:../../entrar");
     }                       
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-	<head>
+    <head>
         <link rel="shortcut icon" type="image/x-icon" href="http://portal.ifrn.edu.br/favicon.ico" />
         <meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title> Expotec </title>
-		<link rel="stylesheet" href="../../../res/lib/css/bootstrap.min.css">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title> Submissão de Minicursos </title>
+        <link rel="stylesheet" href="../../../res/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../../res/lib/css/bootstrap-responsive.min.css">
         
         
-		<link rel="stylesheet" href="../../../res/css/style.css">
-	</head>
-	<body class="body-submissions">
+        <link rel="stylesheet" href="../../../res/css/style.css">
+    </head>
+    <body class="body-submissions">
         <header class="main-header container">
             <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="container">
@@ -62,7 +63,7 @@
                         </ul>
                         <ul id="navUser" class="navbar-right navbar-nav nav">
                             <?php 
-                              
+                                
                                 if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
                                     $user = $_SESSION['nome']; 
                                     echo "
@@ -70,8 +71,6 @@
                                     <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
                                     <ul class='dropdown-menu' role='menu'>
                                         <li><a href=''>Minhas atividades</a></li>
-                                        <li class='divider'></li>
-                                        <li><a href=''>Configurações</a></li>
                                         <li class='divider'></li>
                                         <li><a href='../../../php/logout.php'>Sair</a></li>
                                     </ul>
@@ -100,11 +99,92 @@
             <div class="row">
                 <div class="col-md-2"><!-- encher linguiça --></div>
 
-                <div class="col-md-8">
-                    <h1 class="title"> Submissão de minicurso </h1>
-                 
+                <div class="col-md-8 alert">
+                    <h1 class="title"> Submissão de minicursos </h1>
+                    <!-- formulário de submissão -->
+                 <form action="../../../php/functions.php?Atividade=minicurso&User=<?php echo $user; ?>" method="post" >
+                            <div class="div-form">
+                                <label >Título:</label>
+                                <input name="titulo" type="text" class="form-control inputNorm" required placeholder="Título do meu minicurso...">   
+                            </div>
+                            <!-- 
+                            <div class="div-form">
+                                <label>Softwares:</label>
+                                <input name="softwares" type="text" class="form-control inputNorm"  required placeholder="Softwares que usarei...">  
+                            </div>
+                             -->
+                            <div class="div-form">
+                                <label>Local:</label>
+                                <input name="local" type="text" class="form-control inputNorm"  required placeholder="Onde ocorrerá...">  
+                            </div>
+
+                            <div class="div-form">
+                                <label>Vagas:</label>
+                                <input name="vagas" type="text" class="form-control inputNorm"  required placeholder="Número de vagas...">  
+                            </div>
+
+
+                            <div class="div-form">
+                                <label for="resumo">Resumo:</label>
+                                <textarea name="resumo" id="resumo"  rows="5" placeholder="Resumo do meu minicurso..." required></textarea>
+                            </div>
+
+                            <!-- DATA E HORA DO MINICURSO -->
+                            <div class="div-form">
+                                <h4>Dia do minicurso <small>(selecione apenas um horário)</small></h4> 
+                                <select class="inputNorm" name="dia" id="dia" required>
+                                    <option value="">Selecione aqui</option>
+                                    <option id="dia_um"   name="primeiro" value="primeiro">1° dia</option>
+                                    <option id="dia_dois" name="segundo" value="segundo">2° dia</option>
+                                    <option id="dia_tres" name="terceiro" value="terceiro">3° dia</option>
+                                </select> 
+                                <div id="horario_1">
+                                    <h4>Horarios do 1° dia:</h4> 
+                                    <select class="inputNorm" name="horario1" id="horario" >
+                                        <option value=""> Selecione um horário</option>
+                                        <option value="10:30/11:15">10:30/11:15</option>
+                                        <option value="11:15/12:00">11:15/12:00</option>
+                                        <option value="14:15/15:00">14:15/15:00</option>
+                                        <option value="15:30/16:15">15:30/16:15</option>
+                                    </select>
+                                </div>
+                                <div id="horario_2">
+                                    <h4>Horarios do 2° dia:</h4> 
+                                    <select class="inputNorm" name="horario2" id="horario" >
+                                        <option id="n" value="">Selecione um horário</option>
+                                        <option  value="10:30/11:15">10:30/11:15</option>
+                                        <option value="11:15/12:00">11:15/12:00</option>
+                                        <option value="14:15/15:00">14:15/15:00</option>
+                                        <option value="15:30/16:15">15:30/16:15</option>
+                                    </select>
+                                </div>
+                                <div id="horario_3">
+                                    <h4> Horarios do 3° dia:</h4> 
+                                    <select class="inputNorm" name="horario3" id="horario" >
+                                        <option value=""> Selecione um horário</option>
+                                        <option value="10:30/11:15">10:30/11:15</option>
+                                        <option value="11:15/12:00">11:15/12:00</option>
+                                        <option value="14:15/15:00">14:15/15:00</option>
+                                        <option value="15:30/16:15">15:30/16:15</option>
+                                    </select>
+                                </div>
+                                                            
+
+    
+                                <!-- 
+                                <input name="init_horario" type="text" class=" inputNorm horario"  required placeholder="Início (13:00)"> <b>até</b>
+                                <input name="end_horario" type="text" class=" inputNorm horario"  required placeholder="Término (13:45)">  
+                                 -->
+                           
+                            </div>
+                            <!-- DATA E HORA DO MINICURSO -->
+
+                            <div class="div-form">
+                                <input name="cadastrarAtividade" type="submit"  class="btn btn-success inputNorm" value="Salvar">
+                                <input type="button" class="btn_cancel_atividade btn btn-danger inputNorm pull-right" value="Cancelar"  >
+                            </div>
+                        </form>
                 </div>
-                
                 <div class="col-md-2"><!-- encher linguiça --></div>
             </div>
         </div>
@@ -120,11 +200,11 @@
         </footer>
         
 
-		
+        
                    
 
-		<script src="../../../res/lib/js/jquery.min.js"></script>
-		<script src="../../../res/lib/js/bootstrap.min.js"></script>
-		<script src="../../../res/js/script.js"></script>
-	</body>
+        <script src="../../../res/lib/js/jquery.min.js"></script>
+        <script src="../../../res/lib/js/bootstrap.min.js"></script>
+        <script src="../../../res/js/script.js"></script>
+    </body>
 </html>

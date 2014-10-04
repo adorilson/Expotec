@@ -1,23 +1,28 @@
-<!-- 
-<?php  include_once '../../../php/connection.php';?>
+	<?php  include_once '../../../php/connection.php';?>
 <?php 
 	
 	session_start();	
 	if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
 		$id_a = $_GET['id'];
 		$id_u = $_SESSION['id_u'];
+		$t 	  = "palestra"; 
 
-		$command = "SELECT * FROM atividade WHERE id = $id_a AND nome = 'Palestra'" ;
+		$command = "SELECT * FROM atividade WHERE id = :id_a AND tipo = :tipo" ;
 		try {
 			$query = $pdo->prepare($command);
+			$query->bindValue(":id_a",$id_a);
+			$query->bindValue(":tipo",$t);
+			
 			$query->execute();
+
+
 		} catch (PDOException $e) {
 			echo $e->getMessage();
 		}
 		while($result = $query->fetch(PDO::FETCH_OBJ)){
 			$titulo 	= $result->titulo;
 			$descricao  = $result->descricao; 
-			$nome 		= $result->nome;
+			$tipo 		= $result->tipo;
 			$local 		= $result->local;
 		}	
 	}
@@ -63,10 +68,42 @@
                         	<li><a href="../../minicursos/">Mini Cursos</a></li>
                         </ul>
                     </li>
+                     <li><a href="">Palestrantes</a></li>
+	                    <?php  
+	                         if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+	                                $tipo_u = $_SESSION['tipo'];
+	                                    
+	                        	    if($tipo_u == 2){
+	                                    echo "<li><a href='../../submissoes/'>Submissões</a></li>";
+	                    	       }
+	                            }  
+	                    ?>
+
                     <li><a href="">Sobre</a></li>
-                    <li><a href="">Palestrantes</a></li>
+                   
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
+			        <ul id="navUser" class="navbar-right navbar-nav nav">
+                            <?php 
+                              
+                                if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+                                    $user = $_SESSION['nome']; 
+                                    echo "
+                                    <li class='dropdown'>
+                                    <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
+                                    <ul class='dropdown-menu' role='menu'>
+                                    	<li><a href=''>Minhas atividades</a></li>
+                                        <li class='divider'></li>
+                                        <li><a href='../../../php/logout.php'>Sair</a></li> </ul>
+                                    </li>
+                                    </li>"; 
+                                }
+                                else{
+                                  echo ("<li><a href='../../cadastro/' id='cadastro'>Cadastrar</a></li>
+                                  <li><a href='../../entrar/'>Entrar</a></li>");  
+                                }
+                            ?>
+                        </ul>
 			      </div>
 			  </div>
 			</nav>
@@ -105,16 +142,53 @@
 					</p>
 					<br>
 					<div>
-						<a class="btn-success btn" href="../../../php/functions.php?id_a=<?php echo $id_a;?>&id_u=<?php echo $id_u;?>&activity=Palestra">Adicionar à minha lista</a>
+						<?php 
+									try {
+										$comm = "SELECT * FROM usuario, usuario_atividade, atividade WHERE usuario.id = usuario_atividade.usuario_id AND usuario_atividade.atividade_id = atividade.id AND atividade.tipo = :tipo AND usuario.id = :id_u AND atividade.id = :id_a ORDER BY atividade.dia_hora";
+										$query = $pdo->prepare($comm);
+										$query->bindValue(":id_u",$id_u);
+										$query->bindValue(":id_a",$id_a);
+										$query->bindValue(":tipo","palestra");
+										
+										$query->execute();			
+									} catch (PODException $ex) {
+										echo $ex;
+									}
+									
+									$count = $query->rowCount();
+									if($count == 0){
+									 ?>
+									<form action="../../../php/functions.php?id_a=<?php echo $id_a;?>&id_u=<?php echo $id_u;?>&activity=palestra" method="post">
+										<input name="add_activity" type="submit" class="btn-success btn" value="Adicionar">
+									</form>
+								<?php }
+							else{
+								try {
+										$comm = "SELECT * FROM usuario_atividade WHERE usuario_id = :id_u AND atividade_id = :id_a";
+										$query = $pdo->prepare($comm);
+										$query->bindValue(":id_u",$id_u);
+										$query->bindValue(":id_a",$id_a);
+										$query->execute();	
+									} catch (PDOException $e) {
+										echo $e->getMessage();
+									}
+									while($result = $query->fetch(PDO::FETCH_OBJ)){
+										$id = $result->id;	
+									}
+						 ?>
+						 	<form action="../../../php/functions.php?id=<?php echo $id;?>&id_a=<?php echo $id_a;?>&activity=palestra" method="post">
+								<input name="remove_activity" type="submit" class="btn-danger btn" value="Remover">
+							</form>
+						<?php } ?>
 					</div>
 				</div>
 				<div class="col-md-5 add_atividade">
-					<h3> Suas <?php echo $nome.'s';?>  </h3>
+					<h3> Suas <?php echo $tipo.'s';?>  </h3>
 					
 					<div class="div_atividades">
 						<ul class="nav_atividades nav nav-pills nav-stacked">
 								<?php 
-									$comm = "SELECT  usuario_atividade.id, titulo, local, data_hora  FROM usuario, usuario_atividade, atividade WHERE usuario.id = usuario_atividade.usuario_id AND usuario_atividade.atividade_id = atividade.id AND atividade.nome = 'Palestra' AND usuario.id = :id_u ORDER BY atividade.data_hora";
+									$comm = "SELECT  usuario_atividade.id, titulo, local, dia_hora  FROM usuario, usuario_atividade, atividade WHERE usuario.id = usuario_atividade.usuario_id AND usuario_atividade.atividade_id = atividade.id AND atividade.tipo = 'palestra' AND usuario.id = :id_u ORDER BY atividade.dia_hora";
 									try {
 										$query = $pdo->prepare($comm);
 										$query->bindValue(":id_u",$id_u);
@@ -128,24 +202,21 @@
 											
 										
 										while($result = $query->fetch(PDO::FETCH_OBJ)){
-											$t = $result->titulo;
-											$l = $result->local;
-											$d = substr($result->data_hora, 0, 10); 
-											$h = substr($result->data_hora, 11, 8); 
-
-											$d = explode("-", $d);
-											$d = $d[2]."/".$d[1]."/".$d[0];	
+											$t 	= $result->titulo;
+											$l 	= $result->local;
+											$dh = $result->dia_hora;
+											$dia_hora = explode("-", $dh);
+											$d = $dia_hora[0];
+											$h = $dia_hora[1];	
 
 											
 									?>
 									
 									<li>
 										<a>
-											<form action="../../../php/functions.php?id_u=<?php echo $id_u;?>&id_a=<?php echo $id_a;?>&activity=Palestra"  method="post">
-												<button name="delete" class="close" type="submit">&times;</button>
-											</form>
+											
 											<?php echo $t."<br> <small>($l)</small>" ?>
-											<p>Data: <?php echo $d." / Hora:".$h ?> </p>
+											<p><b>Dia:</b> <?php echo $d; ?> <br><b>Horário:</b><?php echo $h; ?> </p>
 										</a>
 									</li>
 
@@ -176,4 +247,3 @@
 		<script src="../../../res/js/script.js"></script>
 	</body>
 </html>
- -->

@@ -61,8 +61,6 @@
                                     <ul class='dropdown-menu' role='menu'>
                                         <li><a href=''>Minhas atividades</a></li>
                                         <li class='divider'></li>
-                                        <li><a href=''>Configurações</a></li>
-                                        <li class='divider'></li>
                                         <li><a href='php/logout.php'>Sair</a></li>
                                     </ul>
                                     </li>
@@ -84,18 +82,17 @@
                 </div><!-- /.container-fluid -->
             </nav>
         </header>
-        <!-- Carousel --> 
-        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+        <!--  
+            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
             <ol class="carousel-indicators">
                 <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
-                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
             </ol>
+            
             <div class="carousel-inner">
                 <div class="item active">
-                    <img class="slide-image" src="res/imgs/carousel/02.jpg">
+                    <img class="slide-image" src="res/imgs/10721373_917247608304435_1233310086_n.jpg" height="960" width="695">
                 </div>
-                
+             
             </div>
             <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
                 <span></span>
@@ -103,50 +100,59 @@
             <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
                 <span> </span>
             </a>
-        </div><!-- End of carousel -->
+        </div>
+            -->    
+               <!-- End of carousel -->
         <div class="container"> 
-            <h1 class=" title visible-md visible-lg"> Novidades  </h1>
-            <h2 class=" title visible-sm visible-xs"> Novidades </h2> 
+              
+        <!-- LOGO -->
+        <br>
+        <img src="res/imgs/log.jpg" height="421" width="600" alt="">
+            
+            <h1 class=" title visible-md visible-lg"> O que é a Expotec?  </h1>
+            <h2 class=" title visible-sm visible-xs"> O que é a Expotec? </h2> 
             <div class="alert col-md-8" >  
-                <h2>Conteúdo e Apresentação</h2>
-                <div>
+                <div class="home-text">
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. At recusandae consectetur laudantium optio cupiditate corrupti a tempora nihil. Itaque amet quae autem numquam tenetur dolorem fugit laudantium quaerat pariatur labore!
-                    </p>
+                        A EXPOTEC é uma exposição realizada anualmente por cada Campus do IFRN e tem por objetivo principal socializar
+                        as experiências científicas, tecnológicas e culturais dos pesquisadores, professores e estudantes da Rede de 
+                        Educação Profissional, Científica e Tecnológica. Neste ano, o Campus João Câmara promove a terceira edição desse evento,
+                        a qual acontecerá nos dias 26, 27 e 28 de novembro, cujo tema é "Educação,
+                        Inovação e Sustentabilidade: Semeando oportunidades na região do Mato Grande.
+                        A 3ª Expotec estará aberta à visitação de escolas como também do público em geral que tenham interesse em 
+                        conferir os projetos finalizados ou em andamento, os quais estimulam o desenvolvimento tecnológico, industrial e 
+                        cultural do Estado do Rio Grande do Norte.
+                     </p>
                 </div>
             </div>
-        
             <div class="col-md-4">  
                 <div class="alert">
-                    <h3 class="news">Notícia 1</h3> 
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab eveniet ducimus fugit beatae obcaecati cum, fuga consequuntur nam atque voluptatem officiis praesentium consectetur voluptatum, velit sit voluptate omnis provident blanditiis.
-                    </p>
-                    <div class="media">
-                        <a class="pull-left">
-                            <img   class="media-object" src="">
-                        </a>
-                        <div>
-                            <h4>Media heading</h4>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint quam laudantium harum, suscipit eveniet quidem vitae recusandae consequuntur adipisci atque, dignissimos reiciendis minima odio! Dolorem distinctio quidem porro velit a.
-                            </p>
-                        </div>
-                    </div>
-                    <hr>
-                    <h3 class="news">Notícia 2</h3> 
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab eveniet ducimus fugit beatae obcaecati cum, fuga consequuntur nam atque voluptatem officiis praesentium consectetur voluptatum, velit sit voluptate omnis provident blanditiis.
-                        officiis praesentium consectetur voluptatum, velit sit voluptate omnis provident blanditiis.
-                    </p>    
-                    <hr>    
+                    <?php 
+                        try {
+                            $command = "SELECT * FROM noticia ORDER BY id DESC";
+                            $query = $pdo->prepare($command);
+                            $query->execute();
+                        } catch (PDOException $e) {
+                            echo $e->getMessage();
+                        }
+                        $row = $query->RowCount();
+                        if($row == 0){
+                            echo "<h3 style='text-align:center'><small> Nenhuma notícia ainda... </small></h3>";
+                        }
+                        else if($row > 0){
+                            while($result = $query->fetch(PDO::FETCH_OBJ)){
+                                $date      = $result->data;
+                                
+                     ?>
+                    <h3 class="news"><?php  echo $result->titulo; ?></h3> 
+                    <h5><small>Postado em: <?php echo $date; ?></small></h5>
+                    <br>
+                        <p>
+                            <?php echo $result->texto; ?>
+                        </p>
+                        <hr>
+                    <?php } } ?>
+                    
                 </div>
             </div>
         </div> 
@@ -155,6 +161,7 @@
         <footer>
             <div class="content">
                 <div class="text-center"> 
+                   <!--  <img src="res/imgs/icons/logo.jpg" height="44" width="50" alt=""> -->
                     <p class="text-muted">© 2014 IFRN</p>
                     <p title=":p" class="text-muted">Desenvolvedor: <a target="_blank" href="https://github.com/Hikee">Carlos Henry</a></p>
                 </div>  

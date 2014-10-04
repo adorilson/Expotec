@@ -6,7 +6,7 @@
         <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title> Expotec </title>
+		<title> Sobmissões </title>
 		<link rel="stylesheet" href="../../res/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../res/lib/css/bootstrap-responsive.min.css">
         
@@ -53,8 +53,6 @@
                                     <ul class='dropdown-menu' role='menu'>
                                         <li><a href=''>Minhas atividades</a></li>
                                         <li class='divider'></li>
-                                        <li><a href=''>Configurações</a></li>
-                                        <li class='divider'></li>
                                         <li><a href='../../php/logout.php'>Sair</a></li>
                                     </ul>
                                     </li>
@@ -86,10 +84,11 @@
                     <h1 class="title"> Submissão de atividades </h1>
                     <div class="nav-submissions">
                         <ul>
-                            <li><a href="minicurso/">Minicursos</a></li>
-                            <li><a href="palestra/">Palestras</a></li>
+                            <li><a href="minicurso/">Minicursos</a> <small>(Duração de 45 minutos)</small> </li>
+                            <li><a href="palestra/">Palestras </a><small>(Duração de 1 hora)</small> </li>
                             <li><a href="">outros</a></li>
                             <li><a href="">outros</a></li>
+                            <!-- possivelmente virão outras... -->
                         </ul>
                     </div>
                 </div>

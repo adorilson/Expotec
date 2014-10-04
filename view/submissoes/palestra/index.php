@@ -17,7 +17,7 @@
         <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title> Expotec </title>
+		<title> Submissão de palestra </title>
 		<link rel="stylesheet" href="../../../res/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../../res/lib/css/bootstrap-responsive.min.css">
         
@@ -72,8 +72,6 @@
                                     <ul class='dropdown-menu' role='menu'>
                                         <li><a href=''>Minhas atividades</a></li>
                                         <li class='divider'></li>
-                                        <li><a href=''>Configurações</a></li>
-                                        <li class='divider'></li>
                                         <li><a href='../../../php/logout.php'>Sair</a></li>
                                     </ul>
                                     </li>
@@ -104,10 +102,10 @@
                 <div class="col-md-8 alert">
                     <h1 class="title"> Submissão de palestra </h1>
                     <!-- formulário de submissão -->
-                 <form action="../../../php/functions.php?Atividade=Palestra&User=<?php echo $user; ?>" method="post" >
+                 <form action="../../../php/functions.php?Atividade=palestra&User=<?php echo $user; ?>" method="post" >
                             <div class="div-form">
-                                <label >Titulo:</label>
-                                <input name="titulo" type="text" class="form-control inputNorm" required placeholder="Titilo da minha palestra...">   
+                                <label >Título:</label>
+                                <input name="titulo" type="text" class="form-control inputNorm" required placeholder="Título da minha palestra...">   
                             </div>
 
                             <div class="div-form">
@@ -134,22 +132,61 @@
                             
                             
                             <div class="div-form">
+                                 <h4>Dia da palestra <small>(selecione apenas um horário)</small></h4>
                                 <select class="inputNorm" name="dia" id="dia" required>
-                                    <option value="">Dia da palestra</option>
+                                    <option value="">Selecione aqui</option>
                                     <option id="dia_um"   name="primeiro" value="primeiro">1° dia</option>
                                     <option id="dia_dois" name="segundo" value="segundo">2° dia</option>
                                     <option id="dia_tres" name="terceiro" value="terceiro">3° dia</option>
-                                </select> - <b>Horario:</b> 
+                                </select> 
 
+                                 <div id="horario_1">
+                                    <h4>Horarios do 1° dia:</h4> 
+                                    <select class="inputNorm" name="horario1" id="horario" >
+                                        <option value=""> Selecione um horário</option>
+                                        <option value="10:30/11:15">10:30/11:15</option>
+                                        <option value="11:15/12:00">11:15/12:00</option>
+                                        <option value="14:15/15:00">14:15/15:00</option>
+                                        <option value="15:30/16:15">15:30/16:15</option>
+                                    </select>
+                                </div>
+                                <div id="horario_2">
+                                    <h4>Horarios do 2° dia:</h4> 
+                                    <select class="inputNorm" name="horario2" id="horario" >
+                                        <option value="">Selecione um horário</option>
+                                        <option value="10:30/11:15">10:30/11:15</option>
+                                        <option value="11:15/12:00">11:15/12:00</option>
+                                        <option value="14:15/15:00">14:15/15:00</option>
+                                        <option value="15:30/16:15">15:30/16:15</option>
+                                    </select>
+                                </div>
+                                <div id="horario_3">
+                                    <h4> Horarios do 3° dia:</h4> 
+                                    <select class="inputNorm" name="horario3" id="horario" >
+                                        <option value=""> Selecione um horário</option>
+                                        <option value="10:30/11:15">10:30/11:15</option>
+                                        <option value="11:15/12:00">11:15/12:00</option>
+                                        <option value="14:15/15:00">14:15/15:00</option>
+                                        <option value="15:30/16:15">15:30/16:15</option>
+                                    </select>
+                                </div>
+                                                            
+
+     
+
+                                
+
+                                <!-- 
                                 <input name="init_horario" type="text" class=" inputNorm horario"  required placeholder="Início (13:00)"> <b>até</b>
                                 <input name="end_horario" type="text" class=" inputNorm horario"  required placeholder="Término (14:00)">  
-                              
+                                 -->
+
                             </div>
                             
 
                             <div class="div-form">
                                 <input name="cadastrarAtividade" type="submit"  class="btn btn-success inputNorm" value="Salvar">
-                                <input type="button" id="btn_cancel_palestra" class="btn btn-danger inputNorm pull-right" value="Cancelar"  >
+                                <input type="button" class="btn_cancel_atividade btn btn-danger inputNorm pull-right" value="Cancelar"  >
                             </div>
                         </form>
                 </div>

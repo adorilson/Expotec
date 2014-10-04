@@ -1,5 +1,5 @@
-<!-- 
-<?php /*include_once '../../php/connection.php'; */?>
+ 
+<?php include_once '../../php/connection.php'; session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -34,14 +34,22 @@
                         	<li><a href="">Mini Cursos</a></li>
                         </ul>
                     </li>
-                    <li><a href="">Sobre</a></li>
                     <li><a href="">Palestrantes</a></li>
+                     <?php  
+                                if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
+                                    $tipo = $_SESSION['tipo'];
+                                    
+                                    if($tipo == 2){
+                                        echo "<li><a href='../submissoes/'>Submissões</a></li>";
+                                    }
+                                }  
+                            ?>
+					<li><a href="">Sobre</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 					<ul id="navUser" class="navbar-right navbar-nav nav">
                             <?php 
-								/*
-                                session_start();
+								
                                 if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
                                     $user = $_SESSION['nome']; 
                                     echo "
@@ -50,9 +58,8 @@
                                     <ul class='dropdown-menu' role='menu'>
 	                                    <li><a href=''>Minhas atividades</a></li>
                                         <li class='divider'></li>
-                                        <li><a href=''>Configurações</a></li>
-                                        <li class='divider'></li>
-                                        <li><a href='php/logout.php'>Sair</a></li>                                    </ul>
+                                        <li><a href='../../php/logout.php'>Sair</a></li>                                   
+                                    </ul>
                                     </li>
                                     </li>"; 
                                 }
@@ -60,7 +67,7 @@
                                   echo ("<li><a href='../cadastro/' id='cadastro'>Cadastrar</a></li>
                                   <li><a href='../entrar/'>Entrar</a></li>");  
                                 }
-                            */
+                            
                             ?>
                         </ul>
 		
@@ -78,11 +85,11 @@
 			<div class="row" >
 				<div class="container">
 					
-				<form class="form-inline pull-right" method="POST" action="#" role="form">
+				<form class="form-inline pull-right" method="GET" action="" role="form">
 				  <span id="search_title"> Agilize sua busca:</span>
 				  <div class="form-group">
 				    <div class="input-group">
-				      <input id="seek" class="form-control" name="keyword"  type="text" placeholder="Titulos ou categorias...">
+				      <input id="seek" class="form-control" name="keyword"  type="text" placeholder="Busque por títulos...">
 				    </div>
 				  </div>
 				  <button type="submit"  class="btn btn-success">Pesquisar</button>
@@ -100,9 +107,8 @@
 				          <tr>
 				            <th>Título</th>
 				            <th>Professor</th>
-							<th>Categoria</th>
 				            <th>Local</th>
-				            <th>Data</th>
+				            <th>Dia</th>
 				            <th>Horário</th>
 				            <th>Vagas</th>
 				            <th>Inscrição</th>
@@ -110,13 +116,13 @@
 				      </thead>
 				      <tbody>
 					<?php 
-							/*
-						if($_POST){
-							$keyword = $_POST['keyword'];
-				        	$command = "SELECT * FROM atividade WHERE nome = 'Minicurso' AND titulo LIKE '%$keyword%' OR categoria LIKE '%$keyword%'";
+							
+						if($_GET){
+							$keyword = $_GET['keyword'];
+				        	$command = "SELECT * FROM atividade WHERE tipo = 'minicurso' AND status = 1 AND titulo LIKE '%$keyword%' ";
 						  
 						}else{
-							$command = "SELECT * FROM atividade WHERE nome = 'Minicurso'";	
+							$command = "SELECT * FROM atividade WHERE tipo = 'minicurso' AND status = 1";	
 						}
 			        							  
 						    try {
@@ -127,36 +133,33 @@
 						    } catch (PDOException $e) {
 						      	echo $e->getMessage();
 						    }
+						     $count = $query->RowCount();
+						    if($count > 0){
 						    while ($result = $query->fetch(PDO::FETCH_OBJ)) {
 						    
-							   	$data = substr($result->data_hora, 0, 10); 
-								$hora = substr($result->data_hora, 11, 8); 
-								$data = explode("-", $data);
-								$data = $data[2]."/".$data[1]."/".$data[0];						   
-							
+								$dia_hora = explode("-", $result->dia_hora);
+							   	$dia 	= $dia_hora[0];
+							   	$hora 	= $dia_hora[1];	 
 							?>
 
 						    <tr>
+								
 								<td> <?php echo $result->titulo; ?> </td>
 								<td> <?php echo $result->ministrante; ?> </td>
-								<td> <?php echo $result->categoria; ?> </td>
 								
 							    <td> <?php echo $result->local; ?> </td>
-							    <td> <?php echo $data; ?> </td>
+							    <td> <?php echo $dia; ?> </td>
 							    <td> <?php echo $hora; ?> </td>
 							    <td> <?php echo $result->vagas; ?> </td>
-								
-								
+						
 
-								<?php 
-
-									$command = "SELECT * FROM";
-								 ?>		
 								 <form action="inscricao/?id=<? echo $result->id; ?>" method="POST">
-									<td> <button class="insc btn " type="submit">Inscreva-se</button></td>
+									<td> <button class="insc btn btn-default" type="submit">Visualizar</button></td>
 						    	</form>
-						    </tr>
-					    <?php } */?>
+
+						  </tr>
+					    <?php } }else{	echo "<h2><small>Nenhum resultado encontrado... Clique novamente em pesquisar</small></h2>";}
+						?>
 
 
 			        </tbody>
@@ -180,4 +183,4 @@
 		
 	</body>
 </html>
- -->
+ 

@@ -34,8 +34,8 @@
 							</div>
 
 							<div class="div-form">
-								<label for="nome">CPF:</label>
-								<input name="cpf"  id="cpf" type="text" class="form-control inputNorm"  required placeholder="Seu cpf...">	
+								<label for="nome">Email:</label>
+								<input name="email"  id="email" type="email" class="form-control inputNorm"  required placeholder="Seu email...">	
 							</div>
 							
 							<div class="div-form">
