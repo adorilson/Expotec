@@ -5,11 +5,8 @@ $(document).ready(function(){
 	
 
 	$('#matricula').hide();
-	
-	$('#horario_1').hide();
-	$('#horario_2').hide();
-	$('#horario_3').hide();
-	
+	$("#pre-requisitos").hide();	
+
 
 
 
@@ -26,36 +23,18 @@ $(document).ready(function(){
 			window.location="../../../";
 	});
 
-	/*  Selectiong the day and hour  */
-	$("#dia").change(function() {
-	 		
-		var el =  document.getElementById('dia');
-	 	if(el.value == "primeiro"){
-	 		$('#horario_1').show('slow');
-	 		$('#horario_2').hide('slow');
-	 		
-
-	 		$('#horario_3').hide('slow');
-	 	}
-	 	else if(el.value == "segundo"){
-	 		$('#horario_2').show('slow');
-
-	 		$('#horario_1').hide('slow');
-	 		$('#horario_3').hide('slow');
-	 	}	
-	 	else if(el.value == "terceiro"){
-	 		$('#horario_3').show('slow');
-
-	 		$('#horario_1').hide('slow');
-	 		$('#horario_2').hide('slow');
-	 	}
-	 	else{
-	 		$('#horario_3').hide('slow');
-	 		$('#horario_1').hide('slow');
-	 		$('#horario_2').hide('slow');
-	 		
-	 	}
-	 });	
+	/*  Requisitos (yes or no)   */
+	$("#sim").click(function(){
+		$("#escolha-pre-requisitos").hide('slow');
+		$("#pre-requisitos").fadeIn('slow');
+	});
+	
+	$("#cancel_submission_activity").click(function(){
+		$("#pre-requisitos").fadeOut('slow');
+		$("#escolha-pre-requisitos").show('slow');
+		$("#nao").click();
+		
+	});
 
 	
 	/* Actions - admin login */
@@ -76,11 +55,42 @@ $(document).ready(function(){
 	 			$('#matricula').hide('slow');
 	 		}	
 	 	});	
+			
+	 	
+	 	
+	 	/* TOOLTIPS */
+	 	$('#minicurriculo').mouseover(function(){
+	 		$('#minicurriculo').tooltip('show');
+	 	});
+	 	$('#extras').mouseover(function(){
+	 		$('#extras').tooltip('show');
+	 	});
+	 
 
+
+
+
+
+
+
+
+
+
+
+
+
+	 /*TEAM  -----*/
 
 
 	 	
- 	
+
+	 	$(".team").mouseover(function(){
+	 		$(".team").tooltip();				
+		});
+		
+
+		
+	 	
 });
 
 

@@ -1,4 +1,4 @@
-<?php include_once '../../php/connection.php'; ?>
+<?php include_once '../../php/connection.php'; session_start();?>
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -6,14 +6,28 @@
         <meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-		<title> Sobmissões </title>
+		<title> Submissões </title>
 		<link rel="stylesheet" href="../../res/lib/css/bootstrap.min.css">
         <link rel="stylesheet" href="../../res/lib/css/bootstrap-responsive.min.css">
         
         
 		<link rel="stylesheet" href="../../res/css/style.css">
+
 	</head>
 	<body class="body-submissions">
+      
+            <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.0";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+
         <header class="main-header container">
             <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="container">
@@ -24,7 +38,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="../../">Expotec</a>
+                        <a class="navbar-brand" href="../../">Início</a>
                     </div>
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -35,23 +49,26 @@
                                     <li><a href="../../aviso/">Palestras</a></li>
                                     <li class="divider"></li>
                                     <li><a href="../../aviso/">Mini Cursos</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="../../aviso/">Oficinas</a></li>
+
                                 </ul>
                             </li>
                             <li><a href="../../aviso/">Palestrantes</a></li>
                             <li><a href="">Submissões</a></li>
-                            <li><a href="">Sobre</a></li>
+                             <li><a href="../organizacao/">Organização</a></li>
                             <li><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>  
                         </ul>
                         <ul id="navUser" class="navbar-right navbar-nav nav">
                             <?php 
-                                session_start();
+                                
                                 if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
                                     $user = $_SESSION['nome']; 
                                     echo "
                                     <li class='dropdown'>
-                                    <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
+                                    <a href='' class='dropdown-toggle' data-toggle='dropdown'>$user<span class='caret'></span></a>
                                     <ul class='dropdown-menu' role='menu'>
-                                        <li><a href=''>Minhas atividades</a></li>
+                                        <li><a href='../perfil'>Área do usuário</a></li>
                                         <li class='divider'></li>
                                         <li><a href='../../php/logout.php'>Sair</a></li>
                                     </ul>
@@ -84,10 +101,10 @@
                     <h1 class="title"> Submissão de atividades </h1>
                     <div class="nav-submissions">
                         <ul>
-                            <li><a href="minicurso/">Minicursos</a> <small>(Duração de 45 minutos)</small> </li>
-                            <li><a href="palestra/">Palestras </a><small>(Duração de 1 hora)</small> </li>
-                            <li><a href="">outros</a></li>
-                            <li><a href="">outros</a></li>
+                            <li><a href="minicurso/">Minicursos</a></li>
+                            <li><a href="palestra/">Palestras</a></li>
+                            <li><a href="oficina/">Oficinas</a></li>
+                            <li><a href="resumo/">Resumos</a></li>
                             <!-- possivelmente virão outras... -->
                         </ul>
                     </div>
@@ -98,13 +115,37 @@
         </div>
 
     
+                 
         <footer>
-            <div class="content">
-                <div class="text-center"> 
-                    <p class="text-muted">© 2014 IFRN</p>
+            <div>
+                <div class="col-md-4">
+                    <div class="text-center"> 
+                         <br> 
+                        <h2><small>Realização</small></h2>
+                        <img src="../../res/imgs/icons/if_jc_logo.jpg" height="100" width="250" alt="">   
+                    </div>  
+                </div>
+                <div class="col-md-4 text-center">
+                    <br>  
+                    <h2><small>Patrocínio e apoio</small></h2>
+                    <img src="../../res/imgs/icons/if_logo.jpg" height="100" width="250" alt="">   
+                    <br>
+                    <!-- <p class="text-muted">© 2014 IFRN</p>
                     <p title=":p" class="text-muted">Desenvolvedor: <a target="_blank" href="https://github.com/Hikee">Carlos Henry</a></p>
-                </div>  
-            </div>
+                    -->
+                </div>
+                
+                 <div class="col-md-4 text-center">
+                    <div class="row ">
+                        
+                        <div class="col-md-12">
+                             <br>
+                            <h2><small>Facebook</small></h2>
+                            <div  class="fb-like-box text-center" data-href="https://www.facebook.com/pages/Expotec-Jo%C3%A3o-C%C3%A2mara/1390423807914217?ref=br_tf" data-colorscheme="light" data-show-faces="true" data-header="false" data-stream="false" data-show-border="false" data-height="196" data-width="300"  ></div> 
+                        </div>      
+                      
+                    </div>
+                </div>
         </footer>
         
 

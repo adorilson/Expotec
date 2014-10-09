@@ -20,7 +20,7 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-			      <a class="navbar-brand" href="../../">Expotec</a>
+			      <a class="navbar-brand" href="../../">Início</a>
 			    </div>
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
@@ -30,10 +30,13 @@
                         	<li><a href="../../aviso/"> Palestras</a></li>
                         	<li class="divider"></li>
                         	<li><a href="../../aviso/">Mini Cursos</a></li>
+                        	<li class="divider"></li>
+                            <li><a href="../../aviso/">Oficinas</a></li>
                         </ul>
                     </li>
-                    <li><a href="">Palestrantes</a></li>
-                    <li><a href="">Sobre</a></li>
+                    
+                    <li><a href="../../aviso/">Palestrantes</a></li>
+                    <li><a href="../organizacao/">Organização</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
 			       </ul>
 			      </div>
@@ -51,13 +54,13 @@
 							
 
 							<div class="div-form">
-								<label for="nome">Nome:</label>
-								<input id="nome"name="nome"type="text" class="form-control inputNorm" required placeholder="">	
+								<label for="email">Email:</label>
+								<input id="email" name="email" type="email" class="form-control inputNorm" required >	
 							</div>
 
 							<div class="div-form">
 								<label for="nome">Senha:</label>
-								<input name="senha" type="password" class="form-control inputNorm" required placeholder="">
+								<input name="senha" type="password" class="form-control inputNorm" required >
 							</div>
 
 							

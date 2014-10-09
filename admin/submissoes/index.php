@@ -2,7 +2,7 @@
 <?php 
 	session_start();
 	if(!isset($_SESSION['user']) && !isset($_SESSION['pass'])){
-		header("Location:../../");
+		 echo "<script>window.location= '../../';'</script>";
 	} 
 
 ?>
@@ -79,11 +79,9 @@
 				        	<th>Tipo</th>
 					        <th>Título</th>
 					        <th>Ministrante</th>
-					        <th>Local</th>
-					        <th>Dia</th>
-					        <th>Horário</th>
+					        <th>Area</th>
+					        <th>Duração</th>
 					        <th>Vagas</th>
-					        <th>Softwares</th>
 							<th>Status</th>
 				         </tr>
 			        </thead>
@@ -103,15 +101,9 @@
 						    $row = $query->RowCount();
 
 						    if($row > 0){
-
-						    
 						    while ($result = $query->fetch(PDO::FETCH_OBJ)) {
 						    
-						   	$dia_hora = explode("-", $result->dia_hora); 
-							
-							$dia = $dia_hora[0];
-							$hora = $dia_hora[1];
-							
+						   
 							if($result->status == 0){
 								$status = "Aceitar";
 								$class = "btn-success"; 
@@ -126,11 +118,11 @@
 								<td> <?php echo $result->tipo; ?> </td>
 								<td> <?php echo "<a href='detalhes/?id=$result->id' title='Ver mais'>".$result->titulo."</a>"; ?> </td>
 								<td> <?php echo $result->ministrante; ?> </td>
-								<td> <?php echo $result->local; ?> </td>
-								<td> <?php echo $dia; ?> </td>
-								<td> <?php echo $hora; ?> </td>
-							    <td> <?php echo $result->vagas; ?> </td>
-								<td> <?php echo $result->softwares; ?> </td>	    
+								<td> <?php echo $result->area; ?> </td>
+								<td> <?php echo $result->duracao; ?> </td>
+								<td> <?php echo $result->vagas; ?> </td>
+								
+									    
 								<form action="../../php/functions.php?id=<?php echo $result->id;?>" method="POST">
 									<td><input name="update_status_activity" class="confirm_activity  insc btn <?php echo $class; ?>" type="submit" value="<?php echo $status; ?>"></td>
 						    	</form>

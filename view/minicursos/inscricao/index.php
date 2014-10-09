@@ -51,7 +51,7 @@
 			        <span class="icon-bar"></span>
 			        <span class="icon-bar"></span>
 			      </button>
-			      <a class="navbar-brand" href="../../../">Expotec</a>
+			      <a class="navbar-brand" href="../../../">Início</a>
 			    </div>
 			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			      <ul class="nav navbar-nav">
@@ -65,13 +65,11 @@
                     </li>
                     <li><a href="../../../aviso/">Palestrantes</a></li>
                       <?php  
-	                         if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
-	                                $tipo_u = $_SESSION['tipo'];
+	                        if(isset($_SESSION['nome']) && isset($_SESSION['senha'])){
 	                                    
-	                        	    if($tipo_u == 2){
-	                                    echo "<li><a href='../../submissoes/'>Submissões</a></li>";
-	                    	       }
-	                            }  
+	                        	 echo "<li><a href='../../submissoes/'>Submissões</a></li>";
+	                    	       
+	                        }  
 	                    ?>
                     <li><a href="">Sobre</a></li>
 			       	<li ><a target="_blank" href="http://portal.ifrn.edu.br/"> Portal IFRN </a></li>
@@ -85,7 +83,7 @@
                                     <li class='dropdown'>
                                     <a href='' class='dropdown-toggle' data-toggle='dropdown'>Olá $user<span class='caret'></span></a>
                                     <ul class='dropdown-menu' role='menu'>
-                                    	<li><a href=''>Minhas atividades</a></li>
+                                    	<li><a href='../../perfil'>Área do usuário</a></li>
                                         <li class='divider'></li>
                                         <li><a href='../../../php/logout.php'>Sair</a></li> </ul>
                                     </li>

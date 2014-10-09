@@ -1,4 +1,4 @@
-<?php include_once 'connection.php'; ?>
+<?php include_once 'connection.php'; session_start();?>
 
 <!DOCTYPE html> <html> <head> 
 <link rel="stylesheet" href="../res/lib/css/bootstrap.min.css">
@@ -28,6 +28,20 @@ function cadastro_wrong(){
 	setTimeout("window.location='../view/cadastro/'",3000);	
 }
 
+function cadastro_wrong_pass(){
+	setTimeout("window.location='../view/cadastro/?senhas=Invalidas'",100);	
+}
+
+function cadastro_wrong_pass_length(){
+	setTimeout("window.location='../view/cadastro/?senha=Fraca'",100);	
+}
+
+
+function update_user(){
+	setTimeout("window.location='../view/perfil/ajustes'",3000);
+}
+
+
 
 /*  OUTRAS  */
 function add_palestra(){
@@ -37,33 +51,34 @@ function add_minicurso(){
 	setTimeout("window.location='../view/minicursos/'",3000);
 }
 
-function cadastro_palestra(){
-	setTimeout("window.location='../view/submissoes/palestra'",3000);
+
+
+function cadastro_activity(){
+	setTimeout("window.location='../view/submissoes/'",3000);
 }
-function cadastro_palestra_fall(){
-	setTimeout("window.location='../view/submissoes/palestra'",5000);
-}
-function cadastro_minicurso(){
-	setTimeout("window.location='../view/submissoes/minicurso'",3000);
-}
-function cadastro_minicurso_fall(){
-	setTimeout("window.location='../view/submissoes/minicurso'",5000);
+
+function cadastro_resumo_wrong(){
+	setTimeout("window.location='../view/submissoes/resumo'",3000);
 }
 
 
-function horario_minicurso_fall(){
-	setTimeout("window.location='../view/submissoes/minicurso'",1000);
+function update_activity(){
+	setTimeout("window.location='../view/perfil/'",3000);
 }
-function horario_palestra_fall(){
-	setTimeout("window.location='../view/submissoes/palestra'",1000);
+
+function user_delete_activity(){
+	setTimeout("window.location='../view/perfil/'",3000);
 }
+
+
+
 
 
 function postar_noticia(){
 	setTimeout("window.location='../admin/noticias/'",3000);
 }
 function delete_noticia(){
-	var op = confirm("Dejesa deletar essa notícia?");
+	var op = confirm("Deseja deletar essa notícia?");
 	return op;
 }
 
@@ -72,249 +87,398 @@ function delete_noticia(){
 
 <?php 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 			if(isset($_POST['cadastrar'])){
 				/* Pegando os valores por $_POST */
-				$nome 		= $_POST['nome'];
-				$senha 		= $_POST['senha'];
-				$email 		= $_POST['email'];
-				$tipo		= $_POST['tipo'];
+				$nome 			= $_POST['nome'];
+				$email 			= $_POST['email'];
+				$senha 			= $_POST['senha'];
+				$conf_senha		= $_POST['confirme_senha'];
+				$cpf 			= $_POST['cpf'];
+				$matricula 		= $_POST['matricula'];
+				//$minicurriculo 	= $_POST['minicurriculo'];
+				$tipo			= $_POST['tipo'];
+				$sexo			= $_POST['sexo'];
 				
+				$d = $_POST['birthday_day'];
+				$m = $_POST['birthday_month'];
+				$y = $_POST['birthday_year'];
+				
+				$idade = 2014 - $y;
 
-				if($tipo == "comunidade"){
+				
+				/*=+=+=+=+++=+=+=+=+=+=+= Verificando o CPF =+=+=+=+++=+=+=+=+=+=+=*/
+				function verifyCPF( $cpf ){
+					if (strpos($cpf, "-") !== false){
+						$cpf = str_replace("-", "", $cpf);
+					}
+					if (strpos($cpf, ".") !== false){
+						$cpf = str_replace(".", "", $cpf);
+					}
 					
-
-					$check = "SELECT * FROM usuario WHERE nome=:nome";
+					$sum = 0;
+					$cpf = str_split( $cpf );
+					$cpftrueverifier = array();
+					$cpfnumbers = array_splice( $cpf , 0, 9 );
+					$cpfdefault = array(10, 9, 8, 7, 6, 5, 4, 3, 2);
 					
-					$queryCheck = $pdo->prepare($check);
-					$queryCheck->bindValue(":nome",$nome);
-
-					$queryCheck->execute();
-
-					$row = $queryCheck->rowCount();
-
-					/*  User already exists  */
-					if($row > 0){
+					for ( $i = 0; $i <= 8; $i++ ){
+						$sum += $cpfnumbers[$i]*$cpfdefault[$i];
+					}
+					$sumresult = $sum % 11; 
 					
+					if ( $sumresult < 2 ){
+						$cpftrueverifier[0] = 0;
+					}
+					else{
+						$cpftrueverifier[0] = 11-$sumresult;
+					}
+					
+					$sum = 0;
+					$cpfdefault = array(11, 10, 9, 8, 7, 6, 5, 4, 3, 2);
+					$cpfnumbers[9] = $cpftrueverifier[0];
+					
+					for ( $i = 0; $i <= 9; $i++ ){
+						$sum += $cpfnumbers[$i]*$cpfdefault[$i];
+					}
+					$sumresult = $sum % 11;
+					if ( $sumresult < 2 ){
+						$cpftrueverifier[1] = 0;
+					}
+					else{
+						$cpftrueverifier[1] = 11 - $sumresult;
+					}
+					$returner = false;
+					if ( $cpf == $cpftrueverifier ){
+						$returner = true;
+					}
 
+					$cpfver = array_merge($cpfnumbers, $cpf);
+
+					if ( count(array_unique($cpfver)) == 1 || $cpfver == array(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0) ){
+						$returner = false;
+					}
+					return $returner;
+					
+				}
+				/*=+=+=+=+++=+=+=+=+=+=+= Verificando o CPF =+=+=+=+++=+=+=+=+=+=+=*/
+	
+
+				$ck = verifyCPF($cpf);
+
+				if($ck){
+					if($senha == $conf_senha){
+						$passSize = strlen ($senha);
+							
+							if ($passSize >= 6 && (strpos($senha,'0') || strpos($senha,'1') || strpos($senha,'2') || strpos($senha,'3') || strpos($senha,'4') || strpos($senha,'5') || strpos($senha,'6') || strpos($senha,'7') || strpos($senha,'8')  || strpos($senha,'9'))) {
+										
+							if($tipo == "comunidade"){
+								
+								$check = "SELECT * FROM usuario WHERE email=:email";
+								
+								$queryCheck = $pdo->prepare($check);
+								$queryCheck->bindValue(":email",$email);
+								$queryCheck->execute();
+
+								$row = $queryCheck->rowCount();
+
+							/*  User already exists  */
+								if($row > 0){
+								
+									echo "
+										<div class='container' style='width:50%; margin-top:10%;' >
+											<div class='row' >
+												<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+													<p style='text-align:center; font: normal 310% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+														Email já cadastrado!!
+													</p>
+													<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+														Carregando...<br><br>
+														<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+													</p>
+													
+												</div>
+											</div>
+										</div>
+										";	
+									echo "<script type='text/javascript'>cadastro_wrong()</script>";
+
+								}
+
+								else if($row < 1){
+
+								$command = "INSERT INTO usuario (nome,senha,email,cpf,idade,sexo,tipo) VALUES(:nome,:senha,:email,:cpf,:idade,:sexo,:tipo)";
+								try {
+									$query = $pdo->prepare($command);
+									$query->bindValue(":nome",$nome);
+									$query->bindValue(":email",$email);
+									$query->bindValue(":senha",SHA1($senha));
+									$query->bindValue(":cpf",$cpf);
+									//$query->bindValue(":minicurriculo",$minicurriculo);
+									$query->bindValue(":tipo",0);
+									$query->bindValue(":sexo",$sexo);
+									$query->bindValue(":idade",$idade);
+									
+									$query->execute();
+										/* show a success message */
+										echo "
+											<div class='container' style='width:50%; margin-top:10%;' >
+												<div class='row' >
+													<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+														<p style='text-align:center; font: normal 230% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+															Cadastro realizado com sucesso!
+														</p>
+														<p style='text-align:center; font: normal 110% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+															Você está sendo redirecionado à página inicial<br><br>
+															<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+														</p>
+														
+													</div>
+												</div>
+											</div>
+											";
+										echo "<script type='text/javascript'>cadastro_right()</script>";
+								
+									} catch (Exception $ex) {
+										print $ex->getMessage();
+									}
+								}
+							}
+							else if($tipo == "aluno"){
+								
+								$check = "SELECT * FROM usuario WHERE email=:email";
+								
+								$queryCheck = $pdo->prepare($check);
+								$queryCheck->bindValue(":email",$email);
+
+								$queryCheck->execute();
+
+								$row = $queryCheck->rowCount();
+
+								/*  User already exists  */
+								if($row > 0){
+								
+
+									echo "
+										<div class='container' style='width:50%; margin-top:10%;' >
+											<div class='row' >
+												<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+													<p style='text-align:center; font: normal 250% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+														Email já cadastrado!!
+													</p>
+													<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+														carregando...<br><br>
+														<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+													</p>
+													
+												</div>
+											</div>
+										</div>
+										";	
+									echo "<script type='text/javascript'>cadastro_wrong()</script>";
+
+								}
+
+								else if($row < 1){
+
+
+									$command = "INSERT INTO usuario (nome,senha,email,cpf,matricula,idade,sexo,tipo) VALUES(:nome,:senha,:email,:cpf,:matricula,:idade,:sexo,:tipo)";
+									try {
+										$query = $pdo->prepare($command);
+										$query->bindValue(":nome",$nome);
+										$query->bindValue(":email",$email);
+										$query->bindValue(":senha",SHA1($senha));
+										$query->bindValue(":cpf",$cpf);
+										//$query->bindValue(":minicurriculo",$minicurriculo);
+										$query->bindValue(":matricula",$matricula);
+										$query->bindValue(":tipo",1);
+										$query->bindValue(":sexo",$sexo);
+										$query->bindValue(":idade",$idade);
+									
+										
+										$query->execute();
+										/* show a success message */
+										echo "
+											<div class='container' style='width:50%; margin-top:10%;' >
+												<div class='row' >
+													<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+														<p style='text-align:center; font: normal 230% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+															Cadastro realizado com sucesso!
+														</p>
+														<p style='text-align:center; font: normal 120% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+															Você está sendo redirecionado à página inicial<br><br>
+															<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+														</p>
+														
+													</div>
+												</div>
+											</div>
+											";
+										echo "<script type='text/javascript'>cadastro_right()</script>";
+
+									} catch (Exception $ex) {
+										print $ex->getMessage();
+									}
+
+								}
+							}
+
+
+							else if($tipo == "professor"){
+								
+								$check = "SELECT * FROM usuario WHERE email=:email";
+								
+								$queryCheck = $pdo->prepare($check);
+								$queryCheck->bindValue(":email",$email);
+								
+								$queryCheck->execute();
+
+								$row = $queryCheck->rowCount();
+
+								/*  User already exists  */
+								if($row > 0){
+								
+									echo "
+										<div class='container' style='width:50%; margin-top:10%;' >
+											<div class='row' >
+												<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+													<p style='text-align:center; font: normal 310% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+														Email já cadastrado!!
+													</p>
+													<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+														carregando...<br><br>
+														<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+													</p>
+													
+												</div>
+											</div>
+										</div>
+										";	
+									echo "<script type='text/javascript'>cadastro_wrong()</script>";
+								}
+
+								else if($row < 1){
+
+
+									$command = "INSERT INTO usuario (nome,senha,email,cpf,matricula,idade,sexo,tipo) VALUES(:nome,:senha,:email,:cpf,:matricula,:idade,:sexo,:tipo)";
+									try {
+										$query = $pdo->prepare($command);
+										$query->bindValue(":nome",$nome);
+										$query->bindValue(":email",$email);
+										$query->bindValue(":senha",SHA1($senha));
+										$query->bindValue(":cpf",$cpf);
+										$query->bindValue(":matricula",$matricula);
+										//$query->bindValue(":minicurriculo",$minicurriculo);
+										$query->bindValue(":tipo",2);
+										$query->bindValue(":sexo",$sexo);
+										$query->bindValue(":idade",$idade);
+									
+										
+										$query->execute();
+										/* show a success message */
+											echo "
+											<div class='container' style='width:50%; margin-top:10%;' >
+												<div class='row' >
+													<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+														<p style='text-align:center; font: normal 230% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+															Cadastro realizado com sucesso!
+														</p>
+														<p style='text-align:center; font: normal 120% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+															Você está sendo redirecionado à página inicial<br><br>
+															<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+														</p>
+														
+													</div>
+												</div>
+											</div>
+											";
+											echo "<script type='text/javascript'>cadastro_right()</script>";
+										
+									} catch (Exception $ex) {
+										print $ex->getMessage();
+										} /* end of catch */
+									}
+								}
+						   	  }	/* RIGHT PASS (MORE THAN 6 CHARS)*/
+						   	  else{
+						   	  	echo "<script> cadastro_wrong_pass_length(); </script>";
+						   	  }
+							}/* RIGHT PASS (IF ($SENHA = $CHECKSENHA))*/
+							else{
+								echo "<script> cadastro_wrong_pass(); </script>	";
+							}
+					}
+					else{
 						echo "
 							<div class='container' style='width:50%; margin-top:10%;' >
 								<div class='row' >
 									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 320% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Usuário já existe!!
+										<p style='text-align:center; font: normal 310% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											CPF inválido... 
 										</p>
 										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
 											Carregando...<br><br>
 											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
+										</p>			
 									</div>
 								</div>
 							</div>
-							";	
-						echo "<script type='text/javascript'>cadastro_wrong()</script>";
+						";	
+					echo "<script type='text/javascript'>cadastro_wrong()</script>";
 
 					}
-
-					else if($row < 1){
-
-					$command = "INSERT INTO usuario (nome,senha,email,tipo) VALUES(:nome,:senha,:email,:tipo)";
-					try {
-						$query = $pdo->prepare($command);
-						$query->bindValue(":nome",$nome);
-						$query->bindValue(":senha",$senha);
-						$query->bindValue(":email",$email);
-						$query->bindValue(":tipo",0);
-						
-						$query->execute();
-						/* show a success message */
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Cadastro feito...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";
-						echo "<script type='text/javascript'>cadastro_right()</script>";
-					
-					} catch (Exception $ex) {
-						print $ex->getMessage();
-					}
-				}
-			}
-				else if($tipo == "aluno"){
-					
-					$check = "SELECT * FROM usuario WHERE nome=:nome";
-					
-					$queryCheck = $pdo->prepare($check);
-					$queryCheck->bindValue(":nome",$nome);
-
-					$queryCheck->execute();
-
-					$row = $queryCheck->rowCount();
-
-					/*  User already exists  */
-					if($row > 0){
-					
-
-						echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 320% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Usuário já existe!!
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>cadastro_wrong()</script>";
-					
-					
-
-					}
-
-					else if($row < 1){
+		
+			} /* Fim do cadastro  */ 
 
 
-						$command = "INSERT INTO usuario (nome,senha,email,tipo) VALUES(:nome,:senha,:email,:tipo)";
-						try {
-							$query = $pdo->prepare($command);
-							$query->bindValue(":nome",$nome);
-							$query->bindValue(":senha",$senha);
-							$query->bindValue(":email",$email);
-							$query->bindValue(":tipo",1);
-							
-							$query->execute();
-							/* show a success message */
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Cadastro feito...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";
-							echo "<script type='text/javascript'>cadastro_right()</script>";
-
-						} catch (Exception $ex) {
-							print $ex->getMessage();
-						}
-
-					}
-				}
-
-
-				else if($tipo == "professor"){
-					
-					$check = "SELECT * FROM usuario WHERE nome=:nome";
-					
-					$queryCheck = $pdo->prepare($check);
-					$queryCheck->bindValue(":nome",$nome);
-					
-
-					$queryCheck->execute();
-
-					$row = $queryCheck->rowCount();
-
-					/*  User already exists  */
-					if($row > 0){
-					
-						echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 320% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Usuário já existe!!
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>cadastro_wrong()</script>";
-					
-					
-
-					}
-
-					else if($row < 1){
-
-
-					$command = "INSERT INTO usuario (nome,senha,email,tipo) VALUES(:nome,:senha,:email,:tipo)";
-					try {
-						$query = $pdo->prepare($command);
-						$query->bindValue(":nome",$nome);
-						$query->bindValue(":senha",$senha);
-						$query->bindValue(":email",$email);
-						$query->bindValue(":tipo",2);
-						
-						$query->execute();
-						/* show a success message */
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Cadastro feito...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";
-							echo "<script type='text/javascript'>cadastro_right()</script>";
-						
-					} catch (Exception $ex) {
-						print $ex->getMessage();
-					}
-				}
-			}	
-		}
-
-
-		/*----------------------  LOGIN  -----------------------*/
+			/*----------------------  LOGIN USER -----------------------*/
 
 			else if(isset($_POST['entrar'])){
-				$nome 		= $_POST['nome'];
+				$email 		= $_POST['email'];
 				$senha 		= $_POST['senha'];
 				
 				
-					$command = "SELECT * FROM  usuario WHERE (nome=:nome) AND (senha=:senha)";
+					$command = "SELECT * FROM  usuario WHERE (email=:email) AND (senha=:senha)";
 					try {
 						$query = $pdo->prepare($command);
-						$query->bindValue(":nome",$nome, PDO::PARAM_STR);
-						$query->bindValue(":senha",$senha, PDO::PARAM_STR);
+						$query->bindValue(":email",$email, PDO::PARAM_STR);
+						$query->bindValue(":senha",SHA1($senha), PDO::PARAM_STR);
 						$query->execute();
 						
 					} catch (Exception $ex) {
@@ -323,12 +487,18 @@ function delete_noticia(){
 				
 				$row = $query->rowCount();
 				while($result = $query->fetch(PDO::FETCH_OBJ)){
-					session_start();
-					$_SESSION['nome'] 	= $result->nome;
-					$_SESSION['senha'] 	= $result->senha;
-					$_SESSION['email'] 	= $result->email;
-					$_SESSION['id_u']	= $result->id;
-					$_SESSION['tipo']	= $result->tipo;		
+					
+					$_SESSION['id_u']			= $result->id;
+					$_SESSION['nome'] 			= $result->nome;
+					$_SESSION['email'] 			= $result->email;
+					$_SESSION['senha'] 			= $result->senha;
+					$_SESSION['cpf']			= $result->cpf;
+					$_SESSION['matricula']		= $result->matricula;
+					$_SESSION['tipo']			= $result->tipo;
+					$_SESSION['idade']			= $result->idade;
+					$_SESSION['sexo']			= $result->sexo;
+							
+					
 					echo "<p style='margin: -40px 7px;'> Aguardando... </p>";
 					echo "<script type='text/javascript'>login_right()</script>";
 				}
@@ -338,7 +508,7 @@ function delete_noticia(){
 								<div class='row' >
 									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
 										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Algo deu errado!!
+											Email e/ou senha incorretos!
 										</p>
 										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
 											carregando...<br><br>
@@ -354,9 +524,611 @@ function delete_noticia(){
 				}
 
 			}
-			/*---------------------- END LOGIN  -----------------------*/
+			/*---------------------- END LOGIN USER -----------------------*/
 
-			/*---------------------- DELETE ACTIVITY  -----------------------*/
+
+			else if(isset($_POST['update_user']) && isset($_GET['tipo'])){
+				/* Pegando os valores por $_POST */
+				
+				$id  			= $_GET['id'];
+				$tipo			= $_GET['tipo'];	
+				
+				$email 			= $_POST['email'];
+				$cpf 			= $_POST['cpf'];
+				$matricula 		= $_POST['matricula'];
+				//$minicurriculo 	= $_POST['minicurriculo'];
+				$idade			= $_POST['idade'];
+				$sexo			= $_POST['sexo'];
+				if($tipo == 0){
+				try {
+					
+					$command 	= "UPDATE usuario SET  email = :email, cpf = :cpf, idade = :idade, sexo = :sexo  WHERE  id = :id";
+					
+					$query 		= $pdo->prepare($command);
+					
+
+					$query->bindValue(":id",$id);
+					
+					$query->bindValue(":email",$email);
+					$query->bindValue(":cpf",$cpf);
+					$query->bindValue(":idade",$idade);
+					$query->bindValue(":sexo",$sexo);
+					$query->execute();
+
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 230% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+											Atualizado com sucesso!
+										</p>
+										<p style='text-align:center; font: normal 120% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+											Você está sendo redirecionado.<br><br>
+										<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>					
+									</div>
+								</div>
+							</div>
+						";
+
+					echo "<script> update_user();</script>";
+					
+				} catch (PDOException $e) {
+					echo $e;
+				}
+				}/*TYPE 0*/
+				else if($tipo == 1 || $tipo == 2){
+				try {
+					
+					$command 	= "UPDATE usuario SET email = :email, cpf = :cpf, matricula = :matricula, idade = :idade, sexo = :sexo  WHERE  id = :id";
+					
+
+					$query 		= $pdo->prepare($command);
+					
+					$query->bindValue(":id",$id);
+					
+					$query->bindValue(":email",$email);
+					$query->bindValue(":cpf",$cpf);
+					$query->bindValue(":matricula",$matricula);
+					$query->bindValue(":idade",$idade);
+					$query->bindValue(":sexo",$sexo);
+
+					$query->execute();
+
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 230% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+											Atualizado com sucesso!
+										</p>
+										<p style='text-align:center; font: normal 120% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+											Você está sendo redirecionado.<br><br>
+										<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>					
+									</div>
+								</div>
+							</div>
+						";
+
+					echo "<script> update_user();</script>";
+					
+					
+				} catch (PDOException $e) {
+					echo $e;
+				}
+				}/*TYPE 1 OR 2 */
+			}
+
+			/*---------------------- END UPDATE USER -----------------------*/
+
+
+			
+
+
+				/* SUBMISSION PALESTRA  */
+			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'palestra'){
+				try {	
+					$usuario 		= $_GET['User'];
+					$minicurriculo	= $_POST['minicurriculo'];
+					$tipo			= $_GET['Atividade'];
+					
+					$titulo 		= $_POST['titulo'];
+					$area 			= $_POST['area'];
+					$resumo 		= $_POST['resumo'];
+					$duracao	 	= "00:45";
+					//$softwares 	= $_POST['softwares'];
+					//$local		= $_POST['local'];
+					//$vagas		= $_POST['vagas'];
+
+					
+					$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,duracao,minicurriculo,area,status)
+											  VALUES (:tipo,:titulo,:resumo,:usuario,:duracao,:minicurriculo,:area, 0)";	
+									
+					$query 	 = $pdo->prepare($command);
+
+					$query->bindValue(":usuario",$usuario);
+					$query->bindValue(":minicurriculo",$minicurriculo);
+					$query->bindValue(":tipo",$tipo);
+					
+					$query->bindValue(":titulo",$titulo);
+					$query->bindValue(":area",$area);
+					$query->bindValue(":resumo",$resumo);
+					$query->bindValue(":duracao",$duracao);
+
+
+					
+					//$query->bindValue(":softwares",$softwares);
+					//$query->bindValue(":local",$local);
+					//$query->bindValue(":vagas",$vagas);
+					//$query->bindValue(":dia_hora",$dia_hora);
+							
+					$query->execute();	
+
+					echo "
+						<div class='container' style='width:50%; margin-top:10%;' >
+							<div class='row' >
+								<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+									<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+										Proposta de Palestra submetida com sucesso!!!
+									</p>
+									<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+										Acesse a Área do usuário para conferir suas submissões<br><br>Você será redirecionado...<br><br>
+										<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+									</p>				
+								</div>
+							</div>
+						</div>
+					";
+					echo "<script type='text/javascript'>cadastro_activity()</script>";
+				} catch (PDOException $e) {
+					echo $e.getMessage();
+				}
+				
+			}
+
+
+
+
+
+
+
+			/* SUBMISSION MINICURSO  */
+
+			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'minicurso'){
+				
+					$usuario 		= $_GET['User'];
+					$minicurriculo	= $_POST['minicurriculo'];
+					$tipo			= $_GET['Atividade'];
+
+					$titulo 		= $_POST['titulo'];
+					$duracao  		= $_POST['duracao'];
+					$resumo			= $_POST['resumo'];
+					$area  			= $_POST['area'];
+					$vagas  		= $_POST['vagas'];
+					$prerequisitos	= $_POST['prerequisitos'];
+					$extras			= $_POST['extras'];		
+
+
+					if(!is_numeric($vagas)){
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Campo vagas só pode conter números!
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";
+							echo "<script type='text/javascript'>cadastro_activity()</script>";				
+					}
+					else{
+					
+						try {	
+
+							$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,minicurriculo,area,duracao,vagas,prerequisitos,extras,status)
+								           	   		  VALUES (:tipo, :titulo, :resumo, :usuario,:minicurriculo,:area,:duracao,:vagas,:prerequisitos,:extras, 0)";	
+											
+							$query 	 = $pdo->prepare($command);
+							$query->bindValue(":tipo",$tipo);
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":usuario",$usuario);
+							$query->bindValue(":minicurriculo",$minicurriculo);
+							$query->bindValue(":area",$area);
+							$query->bindValue(":duracao",$duracao);
+							$query->bindValue(":vagas",$vagas);
+							$query->bindValue(":prerequisitos",$prerequisitos);
+							$query->bindValue(":extras",$extras);
+							
+
+							$query->execute();	
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Proposta de Minicurso submetida com sucesso!!!
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>				
+										</div>
+									</div>
+								</div>
+							";
+							echo "<script type='text/javascript'>cadastro_activity()</script>";				
+
+					} catch (PDOException $e) {
+						echo $e->getMessage();
+					}
+				}
+			}
+
+
+
+			/* SUBMISSION OFICINA  */
+
+			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'oficina'){
+					
+					$usuario 		= $_GET['User'];
+					$minicurriculo	= $_POST['minicurriculo'];
+					$tipo			= $_GET['Atividade'];
+
+					$titulo 		= $_POST['titulo'];
+					$resumo 		= $_POST['resumo'];
+					$duracao  		= $_POST['duracao'];
+					$area  			= $_POST['area'];
+					$vagas  		= $_POST['vagas'];
+					$prerequisitos	= $_POST['prerequisitos'];
+					$extras			= $_POST['extras'];					
+					
+					if(!is_numeric($vagas)){
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Campo vagas só pode conter números!
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";
+							echo "<script type='text/javascript'>cadastro_activity()</script>";				
+					}
+					else{
+						
+						try {
+
+							$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,minicurriculo,area,duracao,vagas,prerequisitos,extras,status)
+								           	   		  VALUES (:tipo, :titulo, :resumo, :usuario,:minicurriculo,:area,:duracao,:vagas,:prerequisitos,:extras, 0)";	
+											
+							$query 	 = $pdo->prepare($command);
+							$query->bindValue(":tipo",$tipo);
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":usuario",$usuario);
+							$query->bindValue(":minicurriculo",$minicurriculo);
+							$query->bindValue(":area",$area);
+							$query->bindValue(":duracao",$duracao);
+							$query->bindValue(":vagas",$vagas);
+							$query->bindValue(":prerequisitos",$prerequisitos);
+							$query->bindValue(":extras",$extras);
+							
+
+							$query->execute();	
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Proposta de Oficina submetida com sucesso!!!
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>				
+										</div>
+									</div>
+								</div>
+							";
+							echo "<script type='text/javascript'>cadastro_activity()</script>";				
+
+					} catch (PDOException $e) {
+						echo $e->getMessage();
+					}
+				}
+				
+			}
+
+				/* SUBMISSÃO DE RESUMOS  */
+				else if(isset($_FILES['arquivo']) && isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'resumo'){
+				
+					$tipoPermitido  = array('application/pdf');
+					
+
+					try {	
+						
+						$id 			= $_GET['id'];
+						$tipo 			= $_GET['Atividade'];
+						$ministrante	= $_GET['user'];
+						$modalidade 	= $_POST['modalidade'];
+											
+
+						$temp = $_FILES['arquivo']['tmp_name'];
+						$type = $_FILES['arquivo']['type'];
+
+						if(in_array($type , $tipoPermitido)){
+							
+							if(is_dir("files/user/".$id)){
+								
+							}else{
+								$mask=umask(0);
+								mkdir("files/user/".$id,0777);
+								umask($mask);	
+							}
+				
+						$uploaddir 	= "files/user/".$id."/";
+						$uploadFile = $_FILES['arquivo']['name'];
+						$file = str_replace(" ", "_", $uploadFile);
+						$file = str_replace("ç", "c", $uploadFile);
+						
+						$uploadEnd 	= $uploaddir . basename($file);
+						
+						if(move_uploaded_file($_FILES['arquivo']['tmp_name'], $uploadEnd)) { 
+							
+
+							/*Recuperando o arquivo */
+							$pasta 		= "files/user/".$id."/*.*";
+							$arquivo	= glob($pasta); 
+							$num 		= count($arquivo);
+							$count = 0;
+							 
+
+							//Mostrando o arquivo...
+							//echo "<script> window.open('".$arquivo[id_file]."'); </script>"; 
+							
+							for ($i=0; $i < $num; $i++) { 
+								$nome_id = array($i,$arquivo[$i]);
+							}
+
+							
+							$commUp = "INSERT INTO atividade (ministrante,id_file, nome_file, modalidade,tipo,status) VALUES (:ministrante,:id, :file,:modalidade ,:tipo,0)";	
+							$upload = $pdo->prepare($commUp);
+
+							
+							$upload->bindValue(":ministrante",$ministrante);
+							$upload->bindValue(":tipo",$tipo);
+							$upload->bindValue(":id",$nome_id[0]);
+							$upload->bindValue(":file",$nome_id[1]);
+							$upload->bindValue(":modalidade",$modalidade);
+							
+							$upload->execute(); 
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+											 	Proposta de Resumo submetido com sucesso!!!
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>				
+										</div>
+									</div>
+								</div>
+							";
+							echo "<script type='text/javascript'>cadastro_activity()</script>";	
+							
+						}
+				
+				}
+				else{
+							echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Tente um arquivo PDF...
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";
+							echo "<script type='text/javascript'>cadastro_resumo_wrong()</script>";	
+
+						}
+						}				
+
+				catch (PDOException $e) {
+					echo $e->getMessage();
+				}
+			
+			}
+
+
+			else if(isset($_POST['user_update_activity'])){
+					
+					$id 			= $_GET['id'];
+					$tipo			= $_GET['tipo'];
+					$minicurriculo	= $_POST['minicurriculo'];
+					$titulo 		= $_POST['titulo'];
+					$duracao  		= $_POST['duracao'];
+					$resumo			= $_POST['resumo'];
+					$vagas  		= $_POST['vagas'];
+					$prerequisitos	= $_POST['prerequisitos'];
+					$extras			= $_POST['extras'];		
+
+					if($tipo == "minicurso" || $tipo == "oficina"){
+
+					if(!is_numeric($vagas)){
+						echo "
+							<div class='container' style='width:50%; margin-top:10%;' >
+								<div class='row' >
+									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+										<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
+											Campo vagas só pode conter números!
+										</p>
+										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
+											carregando...<br><br>
+											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+										</p>
+										
+									</div>
+								</div>
+							</div>
+							";
+							echo "<script type='text/javascript'>update_activity()</script>";				
+					}
+					else{
+					
+						try {	
+
+							$command = "UPDATE  atividade SET  titulo = :titulo,vagas =:vagas, duracao = :duracao, descricao = :resumo, prerequisitos = :prerequisitos,  minicurriculo = :minicurriculo , extras = :extras WHERE  id = :id  LIMIT 1 ";
+							
+							$query 	 = $pdo->prepare($command);
+							
+							$query->bindValue(":id",$id);
+							
+
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":vagas",$vagas);
+							$query->bindValue(":duracao",$duracao);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":minicurriculo",$minicurriculo);
+							$query->bindValue(":prerequisitos",$prerequisitos);
+							$query->bindValue(":extras",$extras);
+							
+
+							$query->execute();	
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												 Atividade atualizada com sucesso!!!
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>				
+										</div>
+									</div>
+								</div>
+							";
+							echo "<script type='text/javascript'>update_activity()</script>";				
+						
+
+
+					} catch (PDOException $e) {
+						echo $e->getMessage();
+					}
+				
+					}
+				}
+				else if($tipo == "palestra"){
+								
+					
+					
+					
+						try {	
+
+							$command = "UPDATE  atividade SET  titulo = :titulo, descricao = :resumo, minicurriculo = :minicurriculo WHERE  id = :id  LIMIT 1 ";
+							
+							$query 	 = $pdo->prepare($command);
+							
+							$query->bindValue(":id",$id);
+							
+							$query->bindValue(":titulo",$titulo);
+							$query->bindValue(":resumo",$resumo);
+							$query->bindValue(":minicurriculo",$minicurriculo);
+							
+
+							$query->execute();	
+
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												 Atividade atualizada com sucesso!!!
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>				
+										</div>
+									</div>
+								</div>
+							";
+							echo "<script type='text/javascript'>update_activity()</script>";				
+						
+
+
+					} catch (PDOException $e) {
+						echo $e->getMessage();
+					}
+				}
+			}
+
+			/*---------------------- USER  REMOVE  ACTIVITY -----------------------*/
+
+			else if(isset($_POST['user_delete_activity'])){
+					
+					$id = $_GET['id'];	
+	
+					try {
+						$command 	= "DELETE FROM atividade WHERE id = :id LIMIT 1";
+						$query 		= $pdo->prepare($command);
+						$query->bindValue(":id",$id);	
+						$query->execute();	 
+							echo "
+								<div class='container' style='width:50%; margin-top:10%;' >
+									<div class='row' >
+										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
+											<p style='text-align:center; font: normal 200% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
+												Excluindo atividade!!!
+											</p>
+											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
+												Você será redirecionado...<br><br>
+												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
+											</p>				
+										</div>
+									</div>
+								</div>
+							";
+							echo "<script type='text/javascript'>user_delete_activity()</script>";	
+	
+				
+					} catch (PDOException $e) {
+						
+					}			
+			}
+		/*---------------------- DELETE ACTIVITY  FROM USER -----------------------*/
 
 			else if(isset($_POST['remove_activity'])){
 				$activity = $_GET['activity'];	
@@ -401,9 +1173,8 @@ function delete_noticia(){
 
 
 
+
 			/*---------------------- ADD ACTIVITY AT USER'S LIST  -----------------------*/
-
-
 			else if(isset($_POST['add_activity'])  &&  isset($_GET['id_a']) &&  isset($_GET['id_u'])){
 				$id_a 		= $_GET['id_a'];
 				$id_u 		= $_GET['id_u'];
@@ -468,536 +1239,14 @@ function delete_noticia(){
 					}
 					/* mais atividades irão vir... */
 				} catch (PDOException $ex) {
-					echo $ex.getMessage();
+					echo $ex->getMessage();
 				}
 			}
-			
-
-			/* SUBMISSION PALESTRA  */
-			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'palestra'){
-				try {	
-					$usuario 	= $_GET['User'];
-					$tipo		= $_GET['Atividade'];
-					
-					$titulo 	= $_POST['titulo'];
-					$softwares 	= $_POST['softwares'];
-					$resumo 	= $_POST['resumo'];
-					$dia		= $_POST['dia'];
-					$local		= $_POST['local'];
-					$vagas		= $_POST['vagas'];
-					
-
-					$horario1  	= $_POST['horario1'];
-					$horario2  	= $_POST['horario2'];
-					$horario3  	= $_POST['horario3']; 
-					
-					$dia_hora 	= null;
-
-					/* Hour 1 */
-					if($horario2 == '' && $horario3 == ''){
-						$hora  = explode("/",$horario1); 
-						$dia_hora 	= $dia.'-'.$hora[0];
-					
-						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
-						$queryCheck = $pdo->prepare($check); 
-						$queryCheck->bindValue(":dia_hora",$dia_hora);
-						$queryCheck->bindValue(":tipo",$tipo);
-						
-						$queryCheck->execute();
-						$row = $queryCheck->rowCount();
-
-						if($row > 0){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Horário indisponível...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>horario_palestra_fall()</script>";
-						}
-						else{
-							$command = "INSERT INTO atividade (tipo,titulo ,softwares,descricao,ministrante,local,vagas,dia_hora,status)
-								 VALUES (:tipo, :titulo,:softwares , :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
-									
-							$query 	 = $pdo->prepare($command);
-							$query->bindValue(":tipo",$tipo);
-							$query->bindValue(":titulo",$titulo);
-							$query->bindValue(":softwares",$softwares);
-							$query->bindValue(":resumo",$resumo);
-							$query->bindValue(":ministrante",$usuario);
-							$query->bindValue(":local",$local);
-							$query->bindValue(":vagas",$vagas);
-							$query->bindValue(":dia_hora",$dia_hora);
-							
-							$query->execute();	
 
 
 
-							echo "
-								<div class='container' style='width:50%; margin-top:10%;' >
-									<div class='row' >
-										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-												Salvando palestra...
-											</p>
-											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-												Você será redirecionado...<br><br>
-												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-											</p>
-											
-										</div>
-									</div>
-								</div>
-								";
-							echo "<script type='text/javascript'>cadastro_palestra()</script>";
-						}
-
-					}
-					/* Hour 2 */
-					else if($horario1 == '' && $horario3 == ''){
-						$hora  = explode("/", $horario2);
-						$dia_hora 	= $dia.'-'.$hora[0];
-					
-							
-						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
-						$queryCheck = $pdo->prepare($check); 
-						$queryCheck->bindValue(":dia_hora",$dia_hora);
-						$queryCheck->bindValue(":tipo",$tipo);
-						
-						$queryCheck->execute();
-						$row = $queryCheck->rowCount();
-
-						if($row > 0){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Horário indisponível...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>horario_palestra_fall()</script>";
-						}
-						else{
-							$command = "INSERT INTO atividade (tipo,titulo ,softwares,descricao,ministrante,local,vagas,dia_hora,status)
-								 VALUES (:tipo, :titulo,:softwares , :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
-									
-							$query 	 = $pdo->prepare($command);
-							$query->bindValue(":tipo",$tipo);
-							$query->bindValue(":titulo",$titulo);
-							$query->bindValue(":softwares",$softwares);
-							$query->bindValue(":resumo",$resumo);
-							$query->bindValue(":ministrante",$usuario);
-							$query->bindValue(":local",$local);
-							$query->bindValue(":vagas",$vagas);
-							$query->bindValue(":dia_hora",$dia_hora);
-							
-							$query->execute();	
 
 
-
-							echo "
-								<div class='container' style='width:50%; margin-top:10%;' >
-									<div class='row' >
-										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-												Salvando palestra...
-											</p>
-											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-												Você será redirecionado...<br><br>
-												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-											</p>
-											
-										</div>
-									</div>
-								</div>
-								";
-							echo "<script type='text/javascript'>cadastro_palestra()</script>";
-						}
-
-					}
-
-					/* Hour 3 */
-					else if($horario1 == '' && $horario2 == ''){
-
-						$hora  = explode("/", $horario3);
-						$dia_hora 	= $dia.'-'.$hora[0];
-						
-						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
-						$queryCheck = $pdo->prepare($check); 
-						$queryCheck->bindValue(":dia_hora",$dia_hora);
-						$queryCheck->bindValue(":tipo",$tipo);
-						
-						$queryCheck->execute();
-						$row = $queryCheck->rowCount();
-
-						if($row > 0){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Horário indisponível...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>horario_palestra_fall()</script>";
-						}
-							else{
-								$command = "INSERT INTO atividade (tipo,titulo ,softwares,descricao,ministrante,local,vagas,dia_hora,status)
-									 VALUES (:tipo, :titulo,:softwares , :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
-										
-								$query 	 = $pdo->prepare($command);
-								$query->bindValue(":tipo",$tipo);
-								$query->bindValue(":titulo",$titulo);
-								$query->bindValue(":softwares",$softwares);
-								$query->bindValue(":resumo",$resumo);
-								$query->bindValue(":ministrante",$usuario);
-								$query->bindValue(":local",$local);
-								$query->bindValue(":vagas",$vagas);
-								$query->bindValue(":dia_hora",$dia_hora);
-								
-								$query->execute();	
-
-
-
-								echo "
-									<div class='container' style='width:50%; margin-top:10%;' >
-										<div class='row' >
-											<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-												<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-													Salvando palestra...
-												</p>
-												<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-													Você será redirecionado...<br><br>
-													<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-												</p>
-												
-											</div>
-										</div>
-									</div>
-									";
-								echo "<script type='text/javascript'>cadastro_palestra()</script>";
-							}
-
-					}
-					else{
-						echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Talvez você esteja marcando mais de um horário...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>cadastro_palestra_fall()</script>";
-					}
-					
-
-	
-				} catch (PDOException $e) {
-					echo $e.getMessage();
-				}
-				
-			}
-
-
-			/* SUBMISSION MINICURSO  */
-
-			else if(isset($_POST['cadastrarAtividade']) && $_GET['Atividade'] == 'minicurso'){
-				try {	
-					$usuario 	= $_GET['User'];
-					$tipo		= $_GET['Atividade'];
-
-					$titulo 	= $_POST['titulo'];
-					$resumo 	= $_POST['resumo'];
-					$dia		= $_POST['dia'];
-					$local		= $_POST['local'];
-					$vagas		= $_POST['vagas'];
-					
-
-					$horario1  	= $_POST['horario1'];
-					$horario2  	= $_POST['horario2'];
-					$horario3  	= $_POST['horario3']; 
-					
-					$dia_hora 	= null;
-
-
-
-					/* Hour 1 */
-					if($horario2 == '' && $horario3 == ''){
-						$hora  = explode("/",$horario1); 
-						$dia_hora 	= $dia.'-'.$hora[0];
-					
-						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
-						$queryCheck = $pdo->prepare($check); 
-						$queryCheck->bindValue(":dia_hora",$dia_hora);
-						$queryCheck->bindValue(":tipo",$tipo);
-						
-						$queryCheck->execute();
-						$row = $queryCheck->rowCount();
-						
-						if($row > 0){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Horário indisponível...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>horario_minicurso_fall()</script>";
-						}
-						else{
-
-							
-							$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,local,vagas,dia_hora,status)
-								 VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
-									
-							$query 	 = $pdo->prepare($command);
-							$query->bindValue(":tipo",$tipo);
-							$query->bindValue(":titulo",$titulo);
-							$query->bindValue(":resumo",$resumo);
-							$query->bindValue(":ministrante",$usuario);
-							$query->bindValue(":local",$local);
-							$query->bindValue(":vagas",$vagas);
-							$query->bindValue(":dia_hora",$dia_hora);
-							
-							$query->execute();	
-
-							echo "
-								<div class='container' style='width:50%; margin-top:10%;' >
-									<div class='row' >
-										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-												Salvando minicurso...
-											</p>
-											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-												Você será redirecionado...<br><br>
-												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-											</p>
-											
-										</div>
-									</div>
-								</div>
-								";
-							echo "<script type='text/javascript'>cadastro_minicurso()</script>";
-						}
-					}	
-					/* Hour 2 */
-					else if($horario1 == '' && $horario3 == ''){
-						$hora  = explode("/", $horario2);
-						$dia_hora 	= $dia.'-'.$hora[0];
-					
-
-						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
-						$queryCheck = $pdo->prepare($check); 
-						$queryCheck->bindValue(":dia_hora",$dia_hora);
-						$queryCheck->bindValue(":tipo",$tipo);
-						
-						$queryCheck->execute();
-						$row = $queryCheck->rowCount();
-						
-						if($row > 0){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Horário indisponível...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>horario_minicurso_fall()</script>";
-						}
-						else{
-
-								$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,local,vagas,dia_hora,status)
-									 VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
-										
-								$query 	 = $pdo->prepare($command);
-								$query->bindValue(":tipo",$tipo);
-								$query->bindValue(":titulo",$titulo);
-								$query->bindValue(":resumo",$resumo);
-								$query->bindValue(":ministrante",$usuario);
-								$query->bindValue(":local",$local);
-								$query->bindValue(":vagas",$vagas);
-								$query->bindValue(":dia_hora",$dia_hora);
-								
-								$query->execute();
-
-							echo "
-								<div class='container' style='width:50%; margin-top:10%;' >
-									<div class='row' >
-										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-												Salvando minicurso...
-											</p>
-											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-												Você será redirecionado...<br><br>
-												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-											</p>
-											
-										</div>
-									</div>
-								</div>
-								";
-							echo "<script type='text/javascript'>cadastro_minicurso()</script>";
-						
-						}
-					}
-
-						/* Hour 3 */
-					else if($horario1 == '' && $horario2 == ''){
-						$hora 	= explode("/", $horario3) ;
-						$dia_hora 	= $dia.'-'.$hora[0];
-						
-
-						$check 		= "SELECT dia_hora FROM atividade WHERE dia_hora = :dia_hora AND tipo = :tipo ";
-						$queryCheck = $pdo->prepare($check); 
-						$queryCheck->bindValue(":dia_hora",$dia_hora);
-						$queryCheck->bindValue(":tipo",$tipo);
-						
-						$queryCheck->execute();
-						$row = $queryCheck->rowCount();
-						
-						if($row > 0){
-							echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Horário indisponível...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>horario_minicurso_fall()</script>";
-						}
-						else{
-
-								$command = "INSERT INTO atividade (tipo,titulo,descricao,ministrante,local,vagas,dia_hora,status)
-									 VALUES (:tipo, :titulo, :resumo, :ministrante, :local, :vagas, :dia_hora , 0)";	
-										
-								$query 	 = $pdo->prepare($command);
-								$query->bindValue(":tipo",$tipo);
-								$query->bindValue(":titulo",$titulo);
-								$query->bindValue(":resumo",$resumo);
-								$query->bindValue(":ministrante",$usuario);
-								$query->bindValue(":local",$local);
-								$query->bindValue(":vagas",$vagas);
-								$query->bindValue(":dia_hora",$dia_hora);
-								
-
-							$query->execute();
-							echo "
-								<div class='container' style='width:50%; margin-top:10%;' >
-									<div class='row' >
-										<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-											<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-												Salvando minicurso...
-											</p>
-											<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
-												Você será redirecionado...<br><br>
-												<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-											</p>
-											
-										</div>
-									</div>
-								</div>
-								";	
-							echo "<script type='text/javascript'>cadastro_minicurso()</script>";
-						
-						}
-					}	
-					else{
-						echo "
-							<div class='container' style='width:50%; margin-top:10%;' >
-								<div class='row' >
-									<div class='alert-danger' style='background: #FF6673; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 270% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>Erro!</p>
-										<p style='text-align:center; font: normal 170% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #AA0000;'>
-											Talvez você esteja marcando mais de um horário...
-										</p>
-										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#B23; margin-top:30px; text-shadow: 0 1px #FF99AA;'>
-											carregando...<br><br>
-											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
-										</p>
-										
-									</div>
-								</div>
-							</div>
-							";	
-						echo "<script type='text/javascript'>cadastro_minicurso_fall()</script>";
-					}
-
-				} catch (PDOException $e) {
-					echo $e.getMessage();
-				}
-				
-			}
-				/* ...  MORE ... */
 
 
 
@@ -1021,16 +1270,16 @@ function delete_noticia(){
 				}
 				$row = $query->rowCount();
 				if($row > 0){
-					session_start();
+					
 					while($result = $query->fetch(PDO::FETCH_OBJ)){
 						
 						$_SESSION['user'] = $result->user;
 						$_SESSION['pass'] = $result->pass;	 
 					}
-					header("Location:../admin/submissoes");
+					echo "<script> window.location = '../admin/submissoes'; </script>";
 				}
 				else{
-					header("Location:../");
+					echo "<script> window.location = '../admin'; </script>";
 				}
 
 			}	
@@ -1055,14 +1304,14 @@ function delete_noticia(){
 						$query = $pdo->prepare($command);
 						$query->bindValue(":id",$id);
 						$query->execute();
-						header("Location:../admin/submissoes");	
+						echo "<script> window.location= '../admin/submissoes'</script>";
 					}
 					else if($status == 1){
 						$command = "UPDATE  atividade SET  status = 0 WHERE  id = :id";
 						$query = $pdo->prepare($command);
 						$query->bindValue(":id",$id);
 						$query->execute();
-						header("Location:../admin/submissoes");
+						echo "<script> window.location= '../admin/submissoes'</script>";
 					}
 					
 					
@@ -1070,6 +1319,10 @@ function delete_noticia(){
 					echo $e.getMessage();
 				}
 			}
+
+
+
+
 
 			/*  POST NEWS */
 			else if(isset($_POST['postar_noticia'])){
@@ -1094,9 +1347,6 @@ function delete_noticia(){
 							<div class='container' style='width:50%; margin-top:10%;' >
 								<div class='row' >
 									<div class='alert-danger' style='background: #67D79A; height:300px; padding:10%; box-shadow: 0 1px 2px #222; '>
-										<p style='text-align:center; font: normal 340% Arial; font-weight:300; color:#FFF; text-shadow: 0 1px #444;'>
-											Postando noticía...
-										</p>
 										<p style='text-align:center; font: normal 140% Arial; font-weight:300; color:#296; margin-top:30px; text-shadow: 0 1px #ADC;'>
 											Você será redirecionado...<br><br>
 											<img style='opacity:0.6; ' width='30px' heigh='30px'  src='../res/imgs/gifs/loader.GIF'>
@@ -1114,7 +1364,7 @@ function delete_noticia(){
 					echo $e->getMessage();
 				}
 			}
-			else if(isset($_POST['delete_news']) || $_GET['id']){
+			else if(isset($_POST['delete_news']) && $_GET['id']){
 				$id 	= $_GET['id']; 
 				try {
 					$command = "DELETE FROM noticia WHERE id = :id";
@@ -1122,10 +1372,9 @@ function delete_noticia(){
 					$query->bindValue(":id",$id); 
 					 if(isset($_POST['confirm_delete'])){
 					 	$query->execute();
-					 	header("Location: ../admin/noticias/");
+					 	echo "<script> window.location = '../admin/noticias'; </script>";
 					 }
 					 ?>
-						<body>
 							<div class='container' style='width:50%; margin-top:10%;' >
 								<div class='row' >
 									<div style='background: #EEE; height:300px; padding:7%; box-shadow:0 1px 2px #999; border-top: 5px solid #E34545'>
@@ -1138,16 +1387,17 @@ function delete_noticia(){
 									</div>
 								</div>
 							</div>
-
-						</body>
 				<?php 
 				} catch (PDOException $e) {
 					echo $e->getMessage();
 				}	
 			}
 
+
+
+
 			else{
-				header("Location:../");
+				echo "<script> window.location = ''; </script>";
 			}		
 				
  ?>

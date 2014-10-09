@@ -2,7 +2,7 @@
 <?php 
     session_start();
     if(!isset($_SESSION['user']) && !isset($_SESSION['pass'])){
-        header("Location:../../../");
+        echo "<script>window.location= '../../../';'</script>";
     } 
 
 ?>
@@ -98,7 +98,7 @@
 
                          <div class="div-form">
                             <label>Texto:</label>
-                            <textarea name="texto" id="resumo"  rows="5" placeholder="Fale mais sobre..." required><?php echo $text; ?> </textarea>
+                            <textarea name="texto" class="resumo"  rows="5" placeholder="Fale mais sobre..." required><?php echo $text; ?> </textarea>
                         </div>
                         <div class="div-form">
                             <input  name="update_noticia"  type="submit" class="btn btn-success inputNorm" value="Postar">
@@ -119,6 +119,7 @@
                                 $d      = explode(',', $dx);
                                 $date   = $d[0]."/".$d[1]."/".$d[2]; 
 
+                                
                                 $command = "UPDATE noticia SET  titulo = :titulo, texto = :texto, data = :data WHERE id = :id";     
                                 $query   = $pdo->prepare($command);
                                 $query->bindValue(":titulo",$title);
@@ -126,7 +127,8 @@
                                 $query->bindValue(":id",$id);
                                 $query->bindValue(":data",$date);
                                 $query->execute();
-                                header("Location:../");
+                                echo "<script> window.location= '../'</script>";
+
                                   
                             } catch (PDOException $e) {
                                 
@@ -142,7 +144,7 @@
 
                          <div class="div-form">
                             <label>Texto:</label>
-                            <textarea name="texto" id="resumo"  rows="5" placeholder="Fale mais sobre..." required></textarea>
+                            <textarea name="texto" class="resumo"  rows="5" placeholder="Fale mais sobre..." required></textarea>
                         </div>
                         <div class="div-form">
                             <input  name="postar_noticia"  type="submit" class="btn btn-success inputNorm" value="Postar">
